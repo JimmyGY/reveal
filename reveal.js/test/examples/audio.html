@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+
+	<title>Audio slideshows with reveal.js</title>
+
+	<meta name="description" content="A plugin for reveal.js">
+	<meta name="author" content="Asvin Goel">
+
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+	<link rel="stylesheet" href="reveal.js/css/reveal.css">
+	<link rel="stylesheet" href="reveal.js/css/theme/black.css" id="theme">
+
+	<!-- Code syntax highlighting -->
+	<link rel="stylesheet" href="reveal.js/lib/css/zenburn.css">
+
+	<!-- Printing and PDF exports -->
+	<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'reveal.js/css/print/pdf.css' : 'reveal.js/css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+	</script>
+
+	<!--[if lt IE 9]>
+	<script src="reveal.js/lib/js/html5shiv.js"></script>
+	<![endif]-->
+</head>
+
+<body>
+
+	<div class="reveal">
+		<!-- Any section element inside of this container is displayed as a slide -->
+		<div class="slides">
+		<section>
+			<section data-audio-text="This is a demo on how to create audio slideshows with Reveal js">
+				<h1>Audio slideshows with Reveal.js</h1>
+				<p>
+					<small>Created by <a href="http://www.telematique.eu" >Asvin Goel</a></small>
+				</p>
+
+				<p>Please click the play button below</p>
+			</section>
+			<section data-audio-text="Reveal js is an HTML presentation framework. With which you can easily create and share beautiful presentations">
+				<h2>Reveal.js</h2>
+				<ul>
+				<li ><a href="http://lab.hakim.se/reveal-js/">Reveal.js</a> is an HTML presentation framework with which you can easily create and share beautiful presentations</li>
+				<li class="fragment" data-audio-text="The audio slideshow plugin allows you to easily add audio playback to each slide of your presentation">The <a href="https://github.com/rajgoel/reveal.js/tree/audio-slideshow/plugin/audio-slideshow">audio-slideshow plugin</a> allows you to easily add audio playback to each slide of your presentation</li>
+				</ul>
+			</section>
+			<section data-background="jungle.jpg" data-audio-text="With audio slideshows you can add recorded audio to whatever you want to deliver to your audience">
+				<p>
+					With audio slideshows you can add recorded audio to whatever you want to deliver to your audience. 
+				</p>
+				<p class ="fragment" data-audio-src='audio/birds.ogg'>
+					Listen to the birds
+				</p>
+			</section>
+			<section data-background="jungle.jpg" data-audio-text="By using the slideshow-recorder plugin you can easily record audio to be played in your slideshow">
+				<p>
+					By using the <a href="#/audio-recording">slideshow-recorder</a> plugin you can easily record audio to be played in your slideshow. 
+				</p>
+			</section>
+			<section data-background="jungle.jpg" data-audio-text="The plugin also allows you to use text-to-speech to reed the slide for you">
+				<p>The plugin also allows you to use text-to-speech to read the slide for you</p>
+			</section>
+				<section data-audio-text="The controls of the audio slideshow plugin can also be used to control embedded videos">
+					<h2>Videos</h2>
+					<p>
+					The audio controls can also be used to control videos	
+					</p>
+					<p class="fragment">
+						<video width="720" height="480" preload="auto" data-audio-controls>
+							<source src="http://video.webmfiles.org/big-buck-bunny_trailer.webm">
+							</source>
+						</video>
+					</p>					
+				</section>
+				<section data-audio-text="If a video is provided together with an audio file, the controls of the audio slideshow plugin allow you to run audio and video simultaneously.">
+					<h2>Synchronised audio and video</h2>
+					<p>
+						<video width="720" height="400" preload="auto" data-audio-controls>
+							<source src="http://upload.wikimedia.org/wikipedia/commons/5/59/NASA-solar_eclipse_STEREO-B.ogg">
+							</source>
+						</video>
+					</p>
+					<small>Source: NASA Marshall Space Flight Center (NASA-MSFC)</a>
+					</small>
+				</section>
+
+
+<!--
+				<section data-background-video="http://video.webmfiles.org/big-buck-bunny_trailer.webm">
+					<h2>Video backgrounds</h2>
+				</section>
+-->
+				<section data-audio-text="Unlike screencasts based on video recordings of slide decks, audio slideshows with reveal js have very small resource requirements, and they allow you to easily navigate within the slide deck and to use interactive elements. Furthermore, audio slideshows are text based and can be indexed by search engines">
+				<p>Unlike screencasts based on video recordings of slide decks, audio slideshows with Reveal.js
+				<ul>
+					<li>have very small resource requirements</li>
+					<li>allow you to easily navigate within the slide deck</li>
+					<li>allow you to use interactive elements embedded into the slide decks</li>
+					<li>are text based and can be indexed by search engines</li>
+				</ul>
+				<p>
+				</section>
+		</section>
+		<section>
+			<section data-audio-text="To setup audio playback, you just have to include the audio-slideshow plugin, provide audio files for each slide and fragment, and tell the plugin where to find the files">
+				<h2>Audio playback</h2>
+				<p>To setup audio playback, you just have to</p>
+				<ul>
+					<li>include the audio-slideshow plugin</li>
+					<li>provide audio files for each slide and fragment</li>
+					<li>tell the plugin where to find the files</li>
+				</ul>
+			</section>
+			<section data-audio-text="The plugin can be included just as any other plugin for reveal js.">
+				<h3>Including the plugin</h3>
+				<pre><code class="javascript" data-trim>
+dependencies: [
+	// ...	
+	{ src: 'plugin/audio-slideshow/audio-slideshow.js', condition: function( ) { return !!document.body.classList; } },
+	// ...	
+]					
+				</code></pre>
+			</section>
+			<section data-audio-text="The parameters of the plugin can be set as shown in the example.">
+				<h3>Configuring reveal.js</h3>
+				<pre><code class="javascript" data-trim>
+
+Reveal.initialize({
+	// ...
+	audioPrefix: 'audio/',    // audio files are stored in the "audio" folder
+	audioSuffix: '.ogg',	  // audio files have the ".ogg" ending
+	audioTextToSpeechURL: "http://tts-api.com/tts.mp3?q=",  // text is added to this URL 
+	audioDefaultDuration: 5,  // default duration if no audio is available
+	audioPlayerOpacity: 0.05, // opacity value of audio player if unfocused
+	// ...
+};
+				</code></pre>
+			</section>
+			<section data-audio-text="By setting the data-audio-src attribute for a slide or fragment, an audio file can be specified that is played when the slide or fragment is shown">
+				<p>By setting the <code>data-audio-src</code> attribute for a slide or fragment, an audio file can be specified that is played when the slide or fragment is shown</p>
+				<pre><code class="html" data-trim>
+<div class="fragment" data-audio-src="audio/birds.ogg">
+	Listen to the birds
+</div>
+				</code></pre>
+			</section>
+			<section data-audio-text="If no audio file is explicitly specified, the plugin automatically determines the name of the audio file using the given prefix, the slide or fragment indices, and the suffix.">
+				<p>If no audio file is explicitly specified, the plugin automatically determines the name of the audio file using the given prefix, the slide (or fragment) indices, and the suffix, i.e
+				<pre><code class="javascript" data-trim>
+audioPrefix + Reveal.getIndices().h + '.' + Reveal.getIndices().v + audioSuffix;
+				</code></pre>
+				or
+				<pre><code class="javascript" data-trim>
+audioPrefix + Reveal.getIndices().h + '.' + Reveal.getIndices().v + '.' + Reveal.getIndices().f + audioSuffix;
+				</code></pre>
+				</p>
+			</section>
+			<section data-audio-text="If the data-audio-text attribute is set, the given text is sent to a text-to-speech converter and the generated audio is used as fallback to be played if no audio file is found">
+				<p>If the <code>data-audio-text</code> attribute is set, the given text is sent to a text-to-speech converter and the generated audio is used as fallback to be played if no audio file is found</p>
+				<pre><code class="html" data-trim>
+<div data-audio-text="If the data-audio-text attribute is set, the given text is sent to a text-to-speech converter and the generated audio is used as fallback">
+</div>
+				</code></pre>
+			</section>
+			<section>
+				<p>If no audio file is found and no text is provided, the slide advances after the specified default duration</p>
+			</section>
+			<section data-audio-text="By setting the data-audio-controls attribute for a video, the audio controls are linked to the video. The slideshow advances automatically with the next slide when the audio is completed. If audio or video require buffering, synchronisation may not work perfectly.">
+				<p>By setting the <code>data-audio-controls</code> attribute for a video, the audio controls are linked to the video</p>
+				<pre><code class="html" data-trim>
+<p class="fragment">
+	<video width="720" height="480" preload="auto" data-audio-controls src="http://video.webmfiles.org/big-buck-bunny_trailer.webm">
+	</video>
+</p>					
+				</code></pre>
+			</section>
+			<section data-audio-text="Playback is supported on recent desktop versions of Firefox, Chrome, and Opera. However, audio support is differently implemented for different browsers and operating systems and may not always work flawlessly.">
+				<h3>Compatibility and known issues</h3>
+<ul>
+<li>Playback is supported on recent desktop versions of Firefox, Chrome, and Opera as well as the Android version of Firefox
+</li>
+<li>
+Playback of audio when using Chrome for Android, must be triggered manually for each slide and fragment due to design decisions of Chrome developers
+</li>
+<li>
+For other browser and mobile devices the functionality may be limited or the plugin may not work at all
+</li>						
+</ul>
+			</section>
+		</section>
+		<section id="audio-recording">
+			<section data-audio-text="To setup audio recording you have to include the slideshow-recorder plugin and configure keyboard shortcuts to start or stop recording as well as to download audio files">
+				<h2>Audio recording</h2>
+				<p>To setup audio recording you have to</p>
+				<ul>
+					<li>include the slideshow-recorder plugin</li>
+					<li>configure keyboard shortcuts to start/stop recording and to download audio files</li>
+				</ul>
+			</section>
+			<section data-audio-text="The recorder plugin is included in the same way as the audio-slideshow plugin">
+				<h3>Including the plugin</h3>
+				<pre><code class="javascript" data-trim>
+dependencies: [
+	// ...	
+	{ src: 'plugin/audio-slideshow/slideshow-recorder.js', condition: function( ) { return !!document.body.classList; } },				
+	{ src: 'plugin/audio-slideshow/audio-slideshow.js', condition: function( ) { return !!document.body.classList; } },
+	// ...	
+]					
+				</code></pre>
+			</section>
+			<section data-audio-text="You can configure your own keyboard shortcuts for the recorder plugin">
+				<h3>Configuring reveal.js</h3>
+				<pre><code class="javascript" data-trim>
+Reveal.initialize({
+	// ...	
+	keyboard: { 
+		82: function() { Recorder.toggleRecording(); },	// press 'r' to start/stop recording
+		90: function() { Recorder.downloadZip(); } 	// press 'z' to download zip containing audio files
+	}
+	// ...	
+};
+				</code></pre>
+			</section>
+			<section data-audio-text="To start or stop recording just press the specified button and allow access to the microphone when asked by the browser. A red circle shows that the recorder is on. After stopping the recorder, you can use the audio controls to check your recording." >
+				<h3>Recording</h3>
+				<ul>
+					<li>To start/stop recording just press 'r' (and allow access to the microphone when asked by the browser)</li>
+					<li>A red circle shows that the recorder is on</li>
+					<li>After stopping the recorder, you can use the audio controls to check your recording
+				</ul>
+			</section>
+			<section data-audio-text="When navigating to a slide for which an audio file is already recorded, recording is suspended so that the previously recorded file is not lost. A yellow circle shows that recording is automatically resumed when navigating to a slide without a recorded audio file.">
+				<h3>Navigation while recording</h3>
+				<ul>
+					<li>When navigating to a slide for which an audio file is already recorded, recording is suspended so that the previously recorded file is not lost</li>
+<li>A yellow circle shows that recording is automatically resumed when navigating to a slide without a recorded audio file</li>
+				</ul>
+			</section>
+			<section data-audio-text="After recording is done, you can download a zip-file containing the audio files recorded for each slide and fragment by pressing the specified button. All you have to do is to store the audio files in the folder specified for the audio-slideshow plugin.">
+				<h3>Preparing an audio slideshow</h3>
+				<ul>
+					<li>After recording is done, you can download a zip-file containing the audio files recorded for each slide and fragment by pressing 'z'</li>
+					<li>All you have to do is to store the audio files in the folder specified for the audio-slideshow plugin</li>
+				</ul>
+			</section>
+			<section data-audio-text="Audio recording is supported on recent desktop versions of Firefox, Chrome, and Opera, but may not work at all for other browsers and mobile devices.">
+				<h3>Compatibility and known issues</h3>
+				<ul>
+				<li>The plugin is based on <a href="https://github.com/muaz-khan/WebRTC-Experiment/tree/master/RecordRTC"><code>RecordRTC.js</code></a> and supports recording on recent desktop versions of Firefox, Chrome, and Opera.
+				</li>
+				<li>
+				For other browser and mobile devices recording may not work at all. 
+				</li>						
+				<li>
+				Some known issues are listed 
+				<a href="https://github.com/muaz-khan/WebRTC-Experiment/tree/master/RecordRTC#clarifications">here</a>.
+				</li>						
+				</ul>
+			</section>
+			<section>
+				<h3>Recording on chrome</h3>
+				<p>For slide decks stored on the local disk, you should launch the Chrome browser from the command line window with the additional argument ‘–allow-file-access-from-files’, e.g.</p>
+				<pre data-trim><code>
+google-chrome --allow-file-access-from-files slidedeck.html
+				</code></pre>
+			</section>
+		</section>
+		<section data-audio-text="You can download the plugin on github.">
+			<h2>The end</h2>
+
+You can download the plugin on <a href="https://github.com/rajgoel/reveal.js/tree/audio-slideshow/plugin/audio-slideshow">Github</a>.
+					
+		</section>
+		</div>
+	</div>
+
+	<script src="reveal.js/lib/js/head.min.js"></script>
+	<script src="reveal.js/js/reveal.js"></script>
+
+	<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+				audioPrefix: 'audio/',
+				audioSuffix: '.ogg',
+				audioDefaultDuration: 5,
+				audioPlayerOpacity: 0.2,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // none/fade/slide/convex/concave/zoom
+
+				// Parallax scrolling
+				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+				// parallaxBackgroundSize: '2100px 900px',
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'reveal.js/plugin/audio-slideshow/slideshow-recorder.js', condition: function( ) { return !!document.body.classList; } },				
+					{ src: 'reveal.js/plugin/audio-slideshow/audio-slideshow.js', condition: function( ) { return !!document.body.classList; } }
+				],
+				keyboard: { 
+					82: function() { Recorder.toggleRecording(); },	// press 'r' to start/stop recording
+					90: function() { Recorder.downloadZip(); } 	// press 'z' to download zip containing audio files
+  				}
+			});
+
+	</script>
+
+</body>
+</html>
