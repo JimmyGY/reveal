@@ -5,6 +5,9 @@
  *
  * Copyright (C) 2015 Hakim El Hattab, http://hakim.se
  */
+ /*
+	git test
+ */
 (function( root, factory ) {
 	if( typeof define === 'function' && define.amd ) {
 		// AMD. Register as an anonymous module.
