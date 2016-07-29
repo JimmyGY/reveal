@@ -5,9 +5,6 @@
  *
  * Copyright (C) 2015 Hakim El Hattab, http://hakim.se
  */
- /*
-	git test
- */
 (function( root, factory ) {
 	if( typeof define === 'function' && define.amd ) {
 		// AMD. Register as an anonymous module.
@@ -37,6 +34,7 @@
 		config = {
             separator: ".", 
 			autoDownLoadAudio: false,
+			subTitleTrigger: true,
 			// The "normal" size of the presentation, aspect ratio will be preserved
 			// when the presentation is scaled to fit different resolutions
 			width: 960,
@@ -527,11 +525,13 @@
 	function setupPDF() {
 
 		var slideSize = getComputedSlideSize( window.innerWidth, window.innerHeight );
-
+		
 		// Dimensions of the PDF pages
 		var pageWidth = Math.floor( slideSize.width * ( 1 + config.margin ) ),
-			pageHeight = Math.floor( slideSize.height * ( 1 + config.margin  ) );
+		    pageHeight = Math.floor( slideSize.height * ( 1 + config.margin  ) );
 
+
+			
 		// Dimensions of slides within the pages
 		var slideWidth = slideSize.width,
 			slideHeight = slideSize.height;
@@ -593,7 +593,7 @@
 				}
 
 				// Inject notes if `showNotes` is enabled
-				if( config.showNotes ) {
+				if( config.showNotes && false) {
 					var notes = getSlideNotes( slide );
 					if( notes ) {
 						var notesSpacing = 8;
@@ -609,7 +609,7 @@
 				}
 
 				// Inject slide numbers if `slideNumbers` are enabled
-				if( config.slideNumber ) {
+				if( config.slideNumber && false) {
 					var slideNumberH = parseInt( slide.getAttribute( 'data-index-h' ), 10 ) + 1,
 						slideNumberV = parseInt( slide.getAttribute( 'data-index-v' ), 10 ) + 1;
 
@@ -627,7 +627,6 @@
 		toArray( dom.wrapper.querySelectorAll( SLIDES_SELECTOR + ' .fragment' ) ).forEach( function( fragment ) {
 			fragment.classList.add( 'visible' );
 		} );
-
 	}
 
 	/**
@@ -1333,7 +1332,6 @@
 	 * Checks if this instance is being used to print a PDF.
 	 */
 	function isPrintingPDF() {
-
 		return ( /print-pdf/gi ).test( window.location.search );
 
 	}

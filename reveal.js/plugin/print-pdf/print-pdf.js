@@ -11,6 +11,7 @@
 var page = new WebPage();
 var system = require( 'system' );
 
+
 var slideWidth = system.args[3] ? system.args[3].split( 'x' )[0] : 960;
 var slideHeight = system.args[3] ? system.args[3].split( 'x' )[1] : 700;
 

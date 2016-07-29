@@ -29,6 +29,9 @@ html {
 .reveal .progress,
 .reveal .playback,
 .reveal.overview,
+.subTitleIcon,
+.audio-controls,
+.fa-bars,
 .fork-reveal,
 .share-reveal,
 .state-background {

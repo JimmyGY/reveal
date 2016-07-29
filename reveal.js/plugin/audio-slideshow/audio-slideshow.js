@@ -34,6 +34,10 @@
 	var autoDownLoadAudio = false;
 	
 	var js = document.createElement("link");
+	var iconMode = true;
+	var Px;
+	var py;
+	var subTitleTrigger = true;
 
     js.rel = "stylesheet";
     js.href = "http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css";
@@ -46,7 +50,13 @@
        if (!event.subTitle) {
 		selectAudio(undefined,0);
 		//selectLabel(0);
-		selectIcon(0);
+		if(iconMode){
+			selectIcon(0);
+		}
+		else{
+			selectLabel(0);
+		}
+		
 	   }
 
 	} );
@@ -57,7 +67,12 @@
       if (!event.subTitle) {
 		selectAudio(undefined,0);
 		//selectLabel(0);
-		selectIcon(0);
+		if(iconMode){
+			selectIcon(0);
+		}
+		else{
+			selectLabel(0);
+		}
 	  }
 	} );
 
@@ -66,7 +81,12 @@
 //console.debug( "ready ");
 		selectAudio(undefined,0);
 		//selectLabel(0);
-		selectIcon(0);
+		if(iconMode){
+			selectIcon(0);
+		}
+		else{
+			selectLabel(0);
+		}
 	} );
 
 	Reveal.addEventListener( 'slidechanged', function( event ) {
@@ -79,7 +99,12 @@
 		if (!event.subTitle) {
 		selectAudio(undefined,0);
 		//selectLabel(0);
-		selectIcon(0);
+		if(iconMode){
+			selectIcon(0);
+		}
+		else{
+			selectLabel(0);
+		}
 		}
 	} );
 
@@ -133,14 +158,52 @@
 				currentLabel.style.display = "none";
 			}
 			var indices = Reveal.getIndices();
-			var icon_id = "icon-" + h + "." + v;
-            if (f != undefined && f >= 0) icon_id = icon_id + "." + (f+1)+"."+s;
-			else icon_id = icon_id + '.0.' + s;
-			
-			//console.debug(id);
-			currentIcon = document.getElementById( icon_id );
-			//console.debug(currentLabel);
-			currentIcon.style.display = "block";	
+			if(iconMode){
+				var icon_id = "icon-" + h + "." + v;
+				if (f != undefined && f >= 0) icon_id = icon_id + "." + (f+1)+"."+s;
+				else icon_id = icon_id + '.0.' + s;
+				
+				//console.debug(id);
+				currentIcon = document.getElementById( icon_id );
+				//console.debug(currentLabel);
+				if(subTitleTrigger)
+				currentIcon.style.display = "block";
+				
+				if(Px != undefined && Py != undefined){
+					var iconStyleString = "position:fixed; to p: 20px; left:"+Px+"px; top:"+Py+"px; width: 40px";
+					var labelStyleString = "position:fixed; to p: 20px; left:"+Px+"px; top:"+Py+"px; width: 80%";
+					currentIcon.setAttribute('style', iconStyleString );
+					currentIcon.style.zIndex="1000";
+					document.getElementById(icon_id.replace(/icon-/, "label-")).setAttribute('style', labelStyleString );
+					document.getElementById(icon_id.replace(/icon-/, "label-")).style.zIndex="1000";
+					document.querySelector( ".reveal" ).appendChild(currentIcon);
+					document.querySelector( ".reveal" ).appendChild(document.getElementById(icon_id.replace(/icon-/, "label-")));	
+					document.getElementById(icon_id.replace(/icon-/, "label-")).style.display = "none";
+			   }  
+			}
+			else{
+				var label_id = "label-" + h + "." + v;
+				if (f != undefined && f >= 0) label_id = label_id + "." + (f+1)+"."+s;
+				else label_id = label_id + '.0.' + s;
+				
+				//console.debug(id);
+				currentLabel = document.getElementById( label_id );
+				//console.debug(currentLabel);
+				if(subTitleTrigger)
+				currentLabel.style.display = "block";
+				
+				if(Px != undefined && Py != undefined){
+					var styleString = "position:fixed; to p: 20px; left:"+Px+"px; top:"+Py+"px; width: 80%";
+					currentLabel.setAttribute('style', styleString );
+					currentLabel.style.zIndex="1000";
+					document.getElementById(label_id.replace(/label-/, "icon-")).setAttribute('style', styleString );
+					document.getElementById(label_id.replace(/label-/, "icon-")).style.zIndex="1000";
+					document.querySelector( ".reveal" ).appendChild(currentLabel);
+					document.querySelector( ".reveal" ).appendChild(document.getElementById(label_id.replace(/label-/, "icon-")));	
+					document.getElementById(label_id.replace(/label-/, "icon-")).style.display = "none";
+				}
+			}
+	
 	});
 
 	function selectAudio( previousAudio,sub_indices ) {
@@ -170,7 +233,9 @@
 		if ( currentLabel ) {
 			currentLabel.style.display = "none";
 		}
-		
+		if ( currentIcon ) {
+			currentIcon.style.display = "none";
+		}
 		var indices = Reveal.getIndices();
 		var id = "label-" + indices.h + "." + indices.v;
 		if (indices.f != undefined && indices.f >= 0) id = id + "." + (parseInt(indices.f)+1)+"."+sub_indices;
@@ -179,7 +244,19 @@
 		//console.debug(id);
 		currentLabel = document.getElementById( id );
 		//console.debug(currentLabel);
+		if(subTitleTrigger)
 		currentLabel.style.display = "block";
+		
+		if(Px != undefined && Py != undefined){
+			var styleString = "position:fixed; to p: 20px; left:"+Px+"px; top:"+Py+"px; width: 80%";
+			currentLabel.setAttribute('style', styleString );
+			currentLabel.style.zIndex="1000";
+			document.getElementById(id.replace(/label-/, "icon-")).setAttribute('style', styleString );
+			document.getElementById(id.replace(/label-/, "icon-")).style.zIndex="1000";
+			document.querySelector( ".reveal" ).appendChild(currentLabel);
+			document.querySelector( ".reveal" ).appendChild(document.getElementById(id.replace(/label-/, "icon-")));	
+			document.getElementById(id.replace(/label-/, "icon-")).style.display = "none";
+		}
 		
 	}
 	
@@ -198,8 +275,20 @@
 		//console.debug(id);
 		currentIcon = document.getElementById( id );
 		//console.debug(currentLabel);
+		if(subTitleTrigger)
 		currentIcon.style.display = "block";
 		
+		if(Px != undefined && Py != undefined){
+				var iconStyleString = "position:fixed; to p: 20px; left:"+Px+"px; top:"+Py+"px; width: 40px";
+				var labelStyleString = "position:fixed; to p: 20px; left:"+Px+"px; top:"+Py+"px; width: 80%";
+				currentIcon.setAttribute('style', iconStyleString );
+				currentIcon.style.zIndex="1000";
+				document.getElementById(id.replace(/icon-/, "label-")).setAttribute('style', labelStyleString );
+				document.getElementById(id.replace(/icon-/, "label-")).style.zIndex="1000";
+				document.querySelector( ".reveal" ).appendChild(currentIcon);
+				document.querySelector( ".reveal" ).appendChild(document.getElementById(id.replace(/icon-/, "label-")));	
+				document.getElementById(id.replace(/icon-/, "label-")).style.display = "none";
+		}
 	}
 
 	function setup() {
@@ -209,14 +298,15 @@
 		if ( Reveal.getConfig().audioDefaultDuration ) defaultDuration = Reveal.getConfig().audioDefaultDuration;
 		if ( Reveal.getConfig().audioPlayerOpacity ) playerOpacity = Reveal.getConfig().audioPlayerOpacity;
 		if ( Reveal.getConfig().separator ) separator = Reveal.getConfig().separator;
-		if ( Reveal.getConfig().autoDownLoadAudio ) autoDownLoadAudio = Reveal.getConfig().autoDownLoadAudio;
+		if ( Reveal.getConfig().autoDownLoadAudio != undefined) autoDownLoadAudio = Reveal.getConfig().autoDownLoadAudio;
+		if ( Reveal.getConfig().subTitleTrigger != undefined) subTitleTrigger = Reveal.getConfig().subTitleTrigger;
 		if ( 'ontouchstart' in window || navigator.msMaxTouchPoints ) {
 			opacity = 1;		
 		}
 		if ( Reveal.getConfig().audioStartAtFragment ) startAtFragment = Reveal.getConfig().audioStartAtFragment;
 
 		// set style so that audio controls are shown on hover 
-		var css='.audio-controls>audio { opacity:' + playerOpacity + ';} .audio-controls:hover>audio { opacity:1;}';
+		var css='.audio-controls>audio { opacity:' + playerOpacity + ';} .audio-controls:hover>audio { opacity:1;} .subTitleIcon{opacity:' + playerOpacity + ';} .subTitleIcon:hover {opacity:1;}';
 		style=document.createElement( 'style' );
 		if ( style.styleSheet ) {
 		    style.styleSheet.cssText=css;
@@ -315,6 +405,7 @@
 		labelElement.draggable = true; 
 		labelElement.onclick = (function(sub_indices){
 		return function(){
+		iconMode = true;
 		currentLabel.style.display = "none"
 		var indices = Reveal.getIndices();
 		var id = "icon-" + indices.h + "." + indices.v;
@@ -323,6 +414,7 @@
 		//console.debug(id);
 		currentIcon = document.getElementById( id );
 		//console.debug(currentLabel);
+		if(subTitleTrigger)
 		currentIcon.style.display = "block";
 		}
 	})(i);
@@ -338,26 +430,29 @@
 			var dataTransfer = event.dataTransfer;
 			dataTransfer.dropEffect = "move";
 			var e = event || window.event;
-			var styleString = "position:fixed; to p: 20px; left:"+e.clientX+"px; top:"+e.clientY+"px; width: 80%"
+			var styleString = "position:fixed; to p: 20px; left:"+e.clientX+"px; top:"+e.clientY+"px; width: 80%";
+			Px = e.clientX;
+			Py = e.clientY;
 			document.getElementById(event.target.id).setAttribute('style', styleString );
-			document.getElementById(event.target.id).style.zIndex="1000"
+			document.getElementById(event.target.id).style.zIndex="1000";
 			document.getElementById(event.target.id.replace(/label-/, "icon-")).setAttribute('style', styleString );
-			document.getElementById(event.target.id.replace(/label-/, "icon-")).style.zIndex="1000"
+			document.getElementById(event.target.id.replace(/label-/, "icon-")).style.zIndex="1000";
 			document.querySelector( ".reveal" ).appendChild(document.getElementById(event.target.id));
 			document.querySelector( ".reveal" ).appendChild(document.getElementById(event.target.id.replace(/label-/, "icon-")));
 			document.getElementById(event.target.id.replace(/label-/, "icon-")).style.display = "none";
 		});
 		
 		var icon = document.createElement("i");
-        icon.className = "fa fa-flag";
-        icon.setAttribute('style', "position:　relative; to p: 20px; left:10%; width: 80%" );
+        icon.className = "fa fa-flag subTitleIcon";
+        icon.setAttribute('style', "position:　relative; to p: 20px; left:10%; width: 40px" );
 		icon.id = "icon-" + indices + "." + i;
 		icon.style.display = "none";
 		icon.draggable = true; 
 		icon.onclick = (function(sub_indices){
 			return function(){
 			//console.log(currentIcon);
-			currentIcon.style.display = "none"
+			iconMode = false;
+			currentIcon.style.display = "none";
 			var indices = Reveal.getIndices();
 			var id = "label-" + indices.h + "." + indices.v;
 			if (indices.f != undefined && indices.f >= 0) id = id + "." + (parseInt(indices.f)+1)+"."+sub_indices;
@@ -365,6 +460,7 @@
 			//console.debug(id);
 			currentLabel = document.getElementById( id );
 			//console.debug(currentLabel);
+			if(subTitleTrigger)
 			currentLabel.style.display = "block";
 			}
 		})(i);
@@ -380,11 +476,14 @@
 			var dataTransfer = event.dataTransfer;
 			dataTransfer.dropEffect = "move";
 			var e = event || window.event;
-			var styleString = "position:fixed; to p: 20px; left:"+e.clientX+"px; top:"+e.clientY+"px; width: 80%"
-			document.getElementById(event.target.id).setAttribute('style', styleString );
-			document.getElementById(event.target.id).style.zIndex="1000"
-			document.getElementById(event.target.id.replace(/icon-/, "label-")).setAttribute('style', styleString );
-			document.getElementById(event.target.id.replace(/icon-/, "label-")).style.zIndex="1000"
+			var iconStyleString = "position:fixed; to p: 20px; left:"+e.clientX+"px; top:"+e.clientY+"px; width: 40px";
+			var labelStyleString = "position:fixed; to p: 20px; left:"+e.clientX+"px; top:"+e.clientY+"px; width: 80%";
+			Px = e.clientX;
+			Py = e.clientY;
+			document.getElementById(event.target.id).setAttribute('style', iconStyleString );
+			document.getElementById(event.target.id).style.zIndex="1000";
+			document.getElementById(event.target.id.replace(/icon-/, "label-")).setAttribute('style', labelStyleString );
+			document.getElementById(event.target.id.replace(/icon-/, "label-")).style.zIndex="1000";
 			document.querySelector( ".reveal" ).appendChild(document.getElementById(event.target.id));
 			document.querySelector( ".reveal" ).appendChild(document.getElementById(event.target.id.replace(/icon-/, "label-")));
 			document.getElementById(event.target.id.replace(/icon-/, "label-")).style.display = "none";
@@ -394,7 +493,8 @@
 		//console.log(subtitle);
 		if(i < subtitleArray.length){
 			if(subtitleArray[i].trim() == ""){
-				labelElement.innerText = textArray[i].trim().split(" ")[0];
+				//labelElement.innerText = textArray[i].trim().split(" ")[0];
+				labelElement.innerText = textArray[i].trim();
 			}
 			else{
 				labelElement.innerText = subtitleArray[i].trim();
@@ -402,7 +502,8 @@
 			
 		}
 		else{
-			labelElement.innerText = textArray[i].trim().split(" ")[0];
+			//labelElement.innerText = textArray[i].trim().split(" ")[0];
+			labelElement.innerText = textArray[i].trim();
 		}
 		
 		
@@ -428,12 +529,23 @@
 					Reveal.next();
 					selectAudio( previousAudio,0);
 					//selectLabel(0);
-					selectIcon(0);
+					if(iconMode){
+						selectIcon(0);
+					}
+					else{
+						selectLabel(0);
+					}
+
 				}
 				else{
 					selectAudio( previousAudio,i+1);
 					//selectLabel(i+1);
-					selectIcon(i+1);
+					if(iconMode){
+						selectIcon(i+1);
+					}
+					else{
+						selectLabel(i+1);
+					}
 				}
 				
 			}
@@ -512,7 +624,6 @@
 		container.appendChild( audioElement );
 		container.appendChild( labelElement );
 		container.appendChild( icon );
-			
       }
 	}
 

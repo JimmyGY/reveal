@@ -58,12 +58,17 @@ THE SOFTWARE.
 
     Reveal.addEventListener("fragmentshown", api.listen(container, true));
     Reveal.addEventListener("fragmenthidden", api.listen(container));
-
     Reveal.addEventListener("slidechanged", api.slidechanged(container));
-
+	//Reveal.addEventListener("fragmentShowAll", api.showAll(container));
+	
     return api;
   };
 
+  function isPrintingPDF() {
+		return ( /print-pdf/gi ).test( window.location.search );
+
+	}
+	
   api.slidechanged = function(container) {
     return function(event) {
       var previousSlide = event.previousSlide,
@@ -72,8 +77,6 @@ THE SOFTWARE.
       var preIndices = Reveal.getIndices(previousSlide),
          curIndices = Reveal.getIndices(currentSlide);
 
-      //console.debug(preIndices);
-      //console.debug(curIndices);
       if (preIndices.h > curIndices.h) {
         api.clear(container, previousSlide);
       } else if (preIndices.v > curIndices.v) {
@@ -97,7 +100,6 @@ THE SOFTWARE.
         return this === event.fragment.parentNode;
       }).selectAll(".fragment");
 
-      //console.debug(allFragments[0].length);
       for (var i = 0; i < allFragments[0].length; i++) {
           var isCurrentVisible = allFragments[0][i].classList.contains("current-visible");
           var isCurrentFragment = allFragments[0][i].classList.contains("current-fragment");
@@ -116,14 +118,12 @@ THE SOFTWARE.
               invisibleFragments.push(allFragments[0][i]);
           }
 
-          //console.debug(visibleFragments);
-          //console.debug(invisibleFragments);
       };
 
       container.filter(function(){
         return this === event.fragment.parentNode;
       }).each(function(item){
-        
+		  //console.log(item);
         currentVisibleFragments.forEach(function(element) {
           api.toggle(element, item, false, false);
         });
@@ -152,13 +152,13 @@ THE SOFTWARE.
   api.toggle = function(fragment, item, attr, show){
     if(!item.svg){ return; }
     
-    
     var selector = attr ? fragment.attr(api.cfg("selector")) : fragment.getAttribute(api.cfg("selector"));
 
+	
       item.svg.selectAll(selector)
         .transition()
         .style({opacity: show ? 1 : 0});
-    
+   
     
     return api;
   };
@@ -181,7 +181,7 @@ THE SOFTWARE.
       viewBox: "0 0 "+ item.dims.width + " " + item.dims.height
     });
 
-    return api.clean(item);
+    return isPrintingPDF() ? api.showAll(item) :api.clean(item);
   };
 
   // prepare
@@ -217,6 +217,21 @@ THE SOFTWARE.
 
   }
 
+  api.showAll = function(item) {
+	 var base;
+    item.container.selectAll(".fragment").each(function(){
+      item.svg.selectAll(d3.select(this).attr(api.cfg("selector")))
+        .style({opacity: 1});
+    });
+
+    if(base = item.url.match(/(?:#)(.*)$/)){
+      item.svg.selectAll(base[1])
+        .style({opacity: 1});
+    }
+
+    return api;
+  }
+  
   // preflight, call immediately it d3 is available, otherwise load the script
   api.init = function(){
     var options = Reveal.getConfig().svgFragment || {};
