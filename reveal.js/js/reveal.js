@@ -1333,7 +1333,6 @@
 	 */
 	function isPrintingPDF() {
 		return ( /print-pdf/gi ).test( window.location.search );
-
 	}
 
 	/**
@@ -2296,6 +2295,51 @@
 			} );
 
 		} );
+
+	}
+
+	/*
+		for printing PDF
+	* @param {int} h Horizontal index of the target slide
+	* @param {int} v Vertical index of the target slide
+	* @param {int} f Optional index of a fragment within the
+	*/
+	function displayPDFFragment(h, v, f, show) {
+		if (v == 0) {
+			v = undefined;
+		}
+		var slide = getSlide(h, v);
+
+		if (f !== undefined) {
+			var fragmentElement = slide.querySelector(".fragment[data-fragment-index='"+f+"']");
+			if (show && !fragmentElement.classList.contains('visible')) {
+				fragmentElement.classList.add('visible');
+				dispatchEvent('fragmentshown', {fragment: fragmentElement});
+			} else if (!show && fragmentElement.classList.contains('visible')) {
+				fragmentElement.classList.remove('visible');
+				dispatchEvent('fragmenthidden', {fragment: fragmentElement});
+			}
+			
+		} else {
+			var fragmentElements = slide.querySelectorAll(".fragment");
+
+			fragmentElements.forEach(function(element) {
+          		if (show && !element.classList.contains('visible')) {
+					element.classList.add('visible');
+					//dispatchEvent('fragmentshown', {fragment: element});
+				} else if (!show && element.classList.contains('visible')) {
+					element.classList.remove('visible');
+					//dispatchEvent('fragmenthidden', {fragment: element});
+				}
+        	});
+
+        	//dispatchEvent(show ? 'fragmentshown':'fragmenthidden', {fragment: fragmentElements[0]});
+        	dispatchEvent(show ? 'pdfslideshown':'pdfslidehidden', {slide: slide});
+		}
+	}
+
+	function changeVisibility(fragmentElement, show) {
+		
 
 	}
 
@@ -4604,6 +4648,8 @@
 		getSlideNotes: getSlideNotes,
 
 		selectAudio : selectAudio,
+
+		displayPDFFragment : displayPDFFragment,
 		// Returns the previous slide element, may be null
 		getPreviousSlide: function() {
 			return previousSlide;

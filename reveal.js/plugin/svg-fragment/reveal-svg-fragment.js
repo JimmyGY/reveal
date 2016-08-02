@@ -59,8 +59,9 @@ THE SOFTWARE.
     Reveal.addEventListener("fragmentshown", api.listen(container, true));
     Reveal.addEventListener("fragmenthidden", api.listen(container));
     Reveal.addEventListener("slidechanged", api.slidechanged(container));
-	//Reveal.addEventListener("fragmentShowAll", api.showAll(container));
-	
+	  Reveal.addEventListener("pdfslideshown", api.listenPdfSlide(container, true));
+	  Reveal.addEventListener("pdfslidehidden", api.listenPdfSlide(container));
+
     return api;
   };
 
@@ -82,6 +83,26 @@ THE SOFTWARE.
       } else if (preIndices.v > curIndices.v) {
         api.clear(container, previousSlide);
       }
+      return api;
+    };
+  }
+
+  api.listenPdfSlide = function(container, show) {
+    return function(event) {
+      var slide = event.slide;
+      var allFragments = slide.querySelectorAll(".fragment");
+
+      container.filter(function(){
+        return this.parentNode === slide;
+      }).each(function(item){
+        
+        allFragments.forEach(function(element) {
+          api.toggle(element, item, false, show);
+        });
+
+        api.toggleSlide(slide, item, show);
+      });
+
       return api;
     };
   }
@@ -153,17 +174,29 @@ THE SOFTWARE.
     if(!item.svg){ return; }
     
     var selector = attr ? fragment.attr(api.cfg("selector")) : fragment.getAttribute(api.cfg("selector"));
-
-	
       item.svg.selectAll(selector)
         .transition()
         .style({opacity: show ? 1 : 0});
    
-    
     return api;
   };
 
+  api.toggleSlide = function(slide, item, show){
+    if(!item.svg){ return; }
+    
+    //var selector = attr ? fragment.attr(api.cfg("selector")) : fragment.getAttribute(api.cfg("selector"));
+    var div = slide.querySelector('div');
+    var dataSvgFragment = div.getAttribute('data-svg-fragment');
+    console.debug(dataSvgFragment);
 
+
+    var selector = dataSvgFragment.split('#')[1];
+      item.svg.selectAll(selector)
+        .transition()
+        .style({opacity: show ? 1 : 0});
+   
+    return api;
+  };
   // the iframe was created for this item
   api.iframed = function(item){
     item.iframe = d3.select(this);
@@ -213,8 +246,6 @@ THE SOFTWARE.
           api.toggle(element, item, false, false);
         });
     });
-    
-
   }
 
   api.showAll = function(item) {

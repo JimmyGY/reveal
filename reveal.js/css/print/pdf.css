@@ -1,4 +1,4 @@
-/**
+ /**
  * This stylesheet is used to print reveal.js
  * presentations to PDF.
  *
@@ -31,7 +31,7 @@ html {
 .reveal.overview,
 .subTitleIcon,
 .audio-controls,
-.fa-bars,
+/*.fa-bars*/
 .fork-reveal,
 .share-reveal,
 .state-background {
