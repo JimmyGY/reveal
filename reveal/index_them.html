@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+  
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Matrices, Vectors</title>
+
+    <meta name="description" content="ENGG1410">
+    <meta name="author" content="Chung Chan">
+    
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes, minimal-ui">
+
+    <link rel="stylesheet" href="../reveal.js/css/reveal.css">
+    <link rel="stylesheet" href="inc.css" id="theme">
+    
+    
+    <!-- Code syntax highlighting -->
+    <link rel="stylesheet" href="../reveal.js/lib/css/zenburn.css">
+    
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? '../reveal.js/css/print/pdf.css' : '../reveal.js/css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+    
+    <!--[if lt IE 9]>
+	<script src="../reveal.js/lib/js/html5shiv.js"></script>
+	<![endif]-->
+               	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js"></script>
+	<link rel="stylesheet" href="../reveal.js/css/not.the.skin.css">
+	<link rel="stylesheet" href="../reveal.js/circle.skin/circle.player.css">
+	<link type="text/css" href="../reveal.js/skin/blue.monday/css/jplayer.blue.monday.css" rel="stylesheet" />
+	<script type="text/javascript" src="../reveal.js/js/jquery.transform2d.js"></script>
+	<script type="text/javascript" src="../reveal.js/js/jquery.grab.js"></script>
+	<script type="text/javascript" src="../reveal.js/js/jquery.jplayer.js"></script>
+	<script type="text/javascript" src="../reveal.js/js/mod.csstransforms.min.js"></script>
+	<script type="text/javascript" src="../reveal.js/js/circle.player.js"></script>
+	<script>$.noConflict();</script>
+
+  </head>
+  <body>
+    <div class="reveal">
+      <!-- Any section element inside of this container is displayed as a slide -->
+      <div class="slides">
+<!--
+    <img id="inclogo" src="INC.svg" class="imageposition-inclogo desktop-image">
+    <img id="unilogo" src="CUHK.svg" class="imageposition-unilogo desktop-image">
+-->  
+    <section 
+             data-audio-subtitle="In the previous lectures, we introduced the concept of a vector and showed how vector calculus can be applied to engineering. Vectors are useful in engineering because, unlike scalars, they can capture both the magnitude and the direction in two or three dimensional space. Hence, they can be used to represent curves, surfaces or a region in space.Physical phenomena such as force and temperature in space can be described using the scalar or vector functions. Physical properties can be described or computed using the differential or integral calculus, such as the gradient, divergence, curl, line integral, surface integral or triple integral. There are also integral theorems that allow us to compute the integrals, or convert one integral into another to simplify the computation. In this section, we will generalize concept of vectors even further to a structure called the matrix. Similar to the vectors, we can define some operations such as addition and multiplication. Such operations are called linear algebra. Linear algebra is widely used in engineering because it is capable of modeling many practical problems. It also provide simple and computable solutions to these problems. The google search engine, for instance, use linear algebra to compute the page rank of the web pages."
+             
+             data-audio-text="In the previous lectures, we introduced the concept of a vector and showed how vector calculus can be applied to engineering. Vectors are useful in engineering because, unlike scalars, they can capture both the magnitude and the direction in two or three dimensional space. Hence, they can be used to represent curves, surfaces or a region in space. Physical phenomena such as force and temperature in space can be described using the scalar or vector functions. Physical properties can be described or computed using the differential or integral calculus, such as the gradient, divergence, curl, line integral, surface integral or triple integral. There are also integral theorems that allow us to compute the integrals, or convert one integral into another to simplify the computation. In this section, we will generalize concept of vectors even further to a structure called the matrix. Similar to the vectors, we can define some operations such as addition and multiplication. Such operations are called linear algebra. Linear algebra is widely used in engineering because it is capable of modeling many practical problems. It also provide simple and computable solutions to these problems. The google search engine, for instance, use linear algebra to compute the page rank of the web pages.">
+
+        <h2 style="display:none;">Matrices, Vectors</h2>
+        <h3 style="display:none;">Addition and Scalar Multiplication</h3>
+        <!--       <h2>Info-Clustering:</h2>
+        <h3>A Mathematical Theory for Data Clustering</h3>
+        <small>Chung Chan (<a href="mailto:cchan@inc.cuhk.edu.hk">cchan@inc.cuhk.edu.hk</a>)</small>-->
+    <!-- <div data-svg-fragment="svg/0.svg#[*|label='Layer 1']">
+        <a class="fragment" title="[*|label=Layer2]"></a>
+        <a class="fragment" title="[*|label=Layer3]"></a>        
+        <a class="fragment" title="[*|label=Layer3a]"></a>
+        <a class="fragment" title="[*|label=Layer4]"></a>
+        <a class="fragment" title="[*|label=Layer4a]"></a>
+        <a class="fragment" title="[*|label=Layer5]"></a>
+        <a class="fragment" title="[*|label=Layer6]"></a>
+        <a class="fragment" title="[*|label=Layer7]"></a>
+    </div> -->
+    <div data-svg-fragment="svg/0.svg#[*|label='Layer1']">
+    </div>
+    </section>
+
+    <section 
+             data-audio-subtitle="Some examples of matrices are shown at the top. They are simply a set of numbers or mathematical expressions organized into rows and columns inside a pair of square brackets. Each number or expression inside the matrix is called an entry."
+             data-audio-text="Some examples of matrices are shown at the top. They are simply a set of numbers or mathematical expressions organized into roles and columns inside a pair of square brackets. Each number or expression inside the matrix is called an entry. ">
+        <h3 style="display:none;">Examples and General notations</h3>
+        <div data-svg-fragment="svg/1.svg#[*|label='Layer 1']">
+            <a class="fragment" 
+               data-audio-subtitle="It is customary to index the entry by its row index first followed by its column index. For instance, a one two corresponds to the entry at the first row and second column. In general, we use a boldface capital letter to denote a matrix, and the lower case letter to denote its entries. We may also denote the entry of a matrix by the notation shown in red."
+               data-audio-text="It is customary to index the entry by its role index first followed by its column index. For instance, ei one two corresponds to the entry at the first role and second column. In general, we use a boldface capital letter to denote a matrix, and the lower case letter to denote its entries. We may also denote the entry of a matrix by the notation shown in red. " title="[*|label='Layer 2']"></a>
+            <a class="fragment" 
+               data-audio-subtitle="In the special case when there is only one row, we call the matrix a row vector. It is usually denoted as a boldface lower case letter."
+               data-audio-text="In the special case when there is only one role, we call the matrix a role vector. It is usually denoted as a boldface lower case letter. " title="[*|label='Layer 3']"></a>
+            <a class="fragment" 
+               data-audio-subtitle="In the other special case when the number of columns is equal to one, the matrix is called a column vector, also denoted by a boldface lower case letter. Note that, although we did not distinguish between role or column vector in vector calculus, it will be important to do so for linear algebra."
+               data-audio-text="In the other special case when the number of columns is equal to one, the matrix is called a column vector, also denoted by a boldface lower case letter. Note that, although we did not distinguish between role or column vector in vector calculus, it will be important to do so for linear algebra." title="[*|label='Layer 4']"></a>
+        </div>
+    </section>
+
+    <section 
+            data-audio-subtitle="A matrix with $m$ rows and $n$ columns is called an `m` by `n` matrix. We also say that the size or dimension of the matrix is `m times n`."
+             data-audio-text=" A matrix with m roles and n columns is called an m by n matrix. We also say that the size or dimension of the matrix is m by n,. ">
+        <h3 style="display:none;">Matrix dimensions</h3>
+        <div data-svg-fragment="svg/2.svg#[*|label='Layer 1']">
+            <a class="fragment" 
+               data-audio-subtitle="If the number of row is equal to the number of columns, the matrix is said to be a square matrix."
+               data-audio-text="If the number of role is equal to the number of columns, the matrix is said to be a square matrix. " title="[*|label='Layer 2']"></a>
+            <a class="fragment" 
+               data-audio-subtitle="The elements circled in red is called the main diagonal element. If the rows and columns are indexed from $1$ to $n$, then the main diagonal elements are entries with the same row index as the column index."
+               data-audio-text="The elements circled in red is called the main diagonal element. If the roles and columns are indexed from one to n, then the main diagonal elements are entries with the same role index as the column index. " title="[*|label='Layer 3']"></a>
+            <a class="fragment" 
+               data-audio-subtitle="All other entries are called the off-diagonal elements. Sometimes, we also refer to the entries circled in blue as the minor diagonal elements. The main diagonal elements may also be defined in the same way for rectangular matrices when the number of rows may not be equal to the number of columns."
+               data-audio-text="All other entries are called the off-diagonal elements. Sometimes, we also refer to the entries circled in blue as the minor diagonal elements. The main diagonal elements may also be defined in the same way for rectangular matrices when the number of roles may not be equal to the number of columns." title="[*|label='Layer 4']"></a>
+        </div>
+    </section>                                      
+
+       <section 
+                data-audio-subtitle="We will first introduce two basic operations for the matrices in this section. Consider two matrices `mathbf{A}` and `mathbf{B}`, with entries `a_{jk}` and `b_{jk}` respectively. "
+                data-audio-text=" We will first introduce two basic operations for the matrices in this section. Consider two matrices A and B, with entries a j k and b j k respectively.  ">
+        <h3 style="display:none;">Definitions</h3>
+        <div data-svg-fragment="svg/3.svg#[*|label='Layer 1']">
+            <a class="fragment" 
+               data-audio-subtitle="We say that the two matrices are equal if and only if the matrices have the same dimensions and corresponding entries. For example, a row vector of more than one entries cannot be equal to a column vector because they do not have the same size. That is to say, we distinguish between role and column vectors."
+               data-audio-text="We say that the two matrices are equal if and only if the matrices have the same dimensions and corresponding entries. For example, a role vector of more than one entries cannot be equal to a column vector because they do not have the same size. That is to say, we distinguish between role and column vectors. " title="[*|label='Layer 2']"></a>
+            <a class="fragment" 
+               data-audio-subtitle="The addition of two matrices, denoted as `mathbf{A}` plus `mathbf{B}`, is equal to a matrix whose entry is the sum of the corresponding entries of `mathbf{A}` and `mathbf{B}`. For the addition to be well-defined, the matrices we add together must have the same dimension. An example of adding two square matrices together is shown on the right. "
+               data-audio-text="The addition of two matrices, denoted as A plus B, is equal to a matrix whose entry is the sum of the corresponding entries of A and B. For the addition to be well-defined, the matrices we add together must have the same dimension. An example of adding two square matrices together is shown on the right." title="[*|label='Layer 3']"></a>
+            <a class="fragment" 
+               data-audio-subtitle="Finally, for any `c`, the scalar mulplication of `c` to `mathbf{A}` is equal to the matrix whose entry is the corresponding entries of `mathbf{A}` but multiplied by `c`,. An example is also given on the right. "
+               data-audio-text="Finally, for any scalar c, the scalar mulplication of c to the matrix A is equal to the matrix whose entry is the corresponding entries of A but multiplied by the scalar c,. An example is also given on the right. " title="[*|label='Layer 4']"></a>
+        </div>
+        </section>
+          
+       <section 
+                data-audio-subtitle="  Similar to vector addition, matrix addition satisfies some properties such as commutativity and associativity. "
+                data-audio-text="  Similar to vector addition, matrix addition satisfies some properties such as commutativity and associativity. ">
+        <h3 style="display:none;">Properties</h3>
+        <div data-svg-fragment="svg/4.svg#[*|label='Layer 1']">
+            <a class="fragment" 
+               data-audio-subtitle="The addition is commutative in the sense that $\mathbf{A} + \mathbf{B}$ is equal to `mathbf{B} + mathbf{A}`." title="[*|label='Layer 2']"
+               data-audio-text="The addition is commutative in the sense that Ei plus Bee is equal to Bee plus Ei." title="[*|label='Layer 2']"></a>
+            <a class="fragment" 
+               data-audio-subtitle="If we add `mathbf{B}` to `mathbf{A}` first, and then add `mathbf{C}` to the sum, it is the same as adding `mathbf{B}` and `mathbf{C}` first, and add the sum to `mathbf{A}`. Therefore, we do not need to use parentheses to indicate the order of the additions." title="[*|label='Layer 3']"
+               data-audio-text="If we add B to A first, and then add C to the sum, it is the same as adding B and C first, and add the sum to A. Therefore, we do not need to use parentheses to indicate the order of the additions." title="[*|label='Layer 3']"></a>
+            <a class="fragment" 
+               data-audio-subtitle="Similar to the zero vector, we also use `mathbf{0}` to denote a zero matrix. The zero matrix is also called the additive identity, because adding it to any matrix `mathbf{A}` gives the same matrix `mathbf{A}`. "
+               data-audio-text="Similar to the zero vector, we also use the boldface zero to denote a zero matrix. The zero matrix is also called the additive identity, because adding it to any matrix A gives the same matrix A.  " title="[*|label='Layer 4']"></a>
+             <a class="fragment" 
+                data-audio-subtitle="If multiply negative to `mathbf{A}`, that is, multiply `-1` to every entry of `mathbf{A}`, the result matrix is called the additive inverse `mathbf{A}`. This is because Adding `-mathbf{A}` to `mathbf{A}` gives `mathbf{0}`, the additive identity."
+                data-audio-text="If multiply negative to the matrix A, that is, multiply negative one to every entry of A, the result matrix is called the additive inverse of A. This is because Adding negative A to A gives the zero matrix, the additive identity." title="[*|label='Layer 5']"></a>
+              <a class="fragment" 
+                 data-audio-subtitle="For scalar multiplication, we also have a set of properties similar to those of the vectors."
+                 data-audio-text="For scalar multiplication, we also have a set of properties similar to those of the vectors." title="[*|label='Layer 6']"></a>
+        </div>
+        </section>    
+          
+   
+    </div>
+    </div>
+    
+    <script src="../reveal.js/lib/js/head.min.js"></script>
+    <script src="../reveal.js/js/reveal.js"></script>
+    
+    <script>
+
+      // Full list of configuration options available here:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+    subTitleTrigger: true,
+    width: 960,
+    height: 540,
+          // Factor of the display size that should remain empty around the content
+    margin: 0,
+    // Bounds for smallest/largest possible scale to apply to content
+    minScale: 0.2,
+    maxScale: 1.5,
+      controls: true,
+      progress: true,
+      history: true,
+      center: true,
+      slideNumber: 'c/t',      
+      audioPrefix: 'audio/',
+      audioSuffix: '.ogg',
+      audioDefaultDuration: 5,
+      audioPlayerOpacity: 0.1,
+      audioStartAtFragment: true,
+
+      //audioTextToSpeechURL: "http://api.voicerss.org/?key=f9abfde7f05d494dac86a30dfa78f1b0&c=ogg&f=48khz_16bit_stereo&r=1&hl=en-us&src=",
+
+      showNotes: true,
+
+      theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+      transition: 'slide', // none/fade/slide/convex/concave/zoom
+      transitionSpeed: 'fast',
+      math: {
+      mathjax: 'https://cdn.mathjax.org/mathjax/latest/MathJax.js',
+      config: 'TeX-MML-AM_HTMLorMML'  // See http://docs.mathjax.org/en/latest/config-files.html
+      },
+     
+      menu: {
+        // Specifies which side of the presentation the menu will 
+        // be shown. Use 'left' or 'right'.
+        side: 'left',
+
+        // Add slide numbers to the titles in the slide list.
+        // Use 'true' or format string (same as reveal.js slide numbers)
+        numbers: false,
+
+        // Hide slides from the menu that do not have a title.
+        // Set to 'true' to only list slides with titles.
+        hideMissingTitles: false,
+
+        // Add markers to the slide titles to indicate the 
+        // progress through the presentation
+        markers: false,
+
+        // Specify custom panels to be included in the menu, by
+        // providing an array of objects with 'title', 'icon'
+        // properties, and either a 'src' or 'content' property.
+        custom: false,
+
+        // Specifies the themes that will be available in the themes
+        // menu panel. Set to 'false' to hide themes panel.
+        themes: false, 
+        /*[
+            { name: 'Black', theme: 'css/theme/black.css' },
+            { name: 'White', theme: 'css/theme/white.css' },
+            { name: 'League', theme: 'css/theme/league.css' },
+            { name: 'Sky', theme: 'css/theme/sky.css' },
+            { name: 'Beige', theme: 'css/theme/beige.css' },
+            { name: 'Simple', theme: 'css/theme/simple.css' },
+            { name: 'Serif', theme: 'css/theme/serif.css' },
+            { name: 'Blood', theme: 'css/theme/blood.css' },
+            { name: 'Night', theme: 'css/theme/night.css' },
+            { name: 'Moon', theme: 'css/theme/moon.css' },
+            { name: 'Solarized', theme: 'css/theme/solarized.css' }
+        ],
+*/
+        // Specifies if the transitions menu panel will be shown.
+        transitions: true,
+
+        // Adds a menu button to the slides to open the menu panel.
+        // Set to 'false' to hide the button.
+        openButton: true,
+
+        // If 'true' allows the slide number in the presentation to
+        // open the menu panel. The reveal.js slideNumber option must 
+        // be displayed for this to take effect
+        openSlideNumber: false,
+
+        // If true allows the user to open and navigate the menu using
+        // the keyboard. Standard keyboard interaction with reveal
+        // will be disabled while the menu is open.
+        keyboard: true
+      },
+
+      
+      // Parallax scrolling
+      // parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+      // parallaxBackgroundSize: '2100px 900px',
+
+      // Optional libraries used to extend on reveal.js
+      dependencies: [
+      { src: '../reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+      { src: '../reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      { src: '../reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      { src: '../reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+      { src: '../reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      { src: '../reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
+      { src: '../reveal.js/plugin/audio-slideshow/slideshow-recorder.js', condition: function( ) { return !!document.body.classList; } },				
+      { src: '../reveal.js/plugin/audio-slideshow/audio-slideshow.js', condition: function( ) { return !!document.body.classList; } },
+      { src: '../reveal.js/plugin/math/math.js', async: true },
+      { src: '../reveal.js/plugin/menu/menu.js' },
+      //{ src: '../reveal.js/plugin/title-footer/title-footer.js', async: true, callback: function() { title_footer.initialize("DIMACS Workshop on Network Coding: the Next 15 Years"); } }
+      {
+          // maybe you put this in `plugins`
+          src: '../reveal.js/plugin/svg-fragment/reveal-svg-fragment.js',
+          condition: function(){
+            return !!document.querySelector( '[data-svg-fragment]' );
+          }
+          // Additional options
+          // defaults to using already-loaded version, or CDN
+          //d3: "./d3.min.js",
+          // use a different attribute for your fragment selector
+          //selector: "title",
+      }
+      ],
+      keyboard: { 
+      82: function() { Recorder.toggleRecording(); },	// press 'r' to start/stop recording
+      90: function() { Recorder.downloadZip(); } 	// press 'z' to download zip containing audio files
+      }
+      });
+
+    </script>
+
+  </body>
+</html>
