@@ -37,12 +37,12 @@
 
     var js = document.createElement("link");
     js.rel = "stylesheet";
-    js.href = "../css/font-awesome.min.css";
+    js.href = "../reveal.js/css/font-awesome.min.css";
     document.head.appendChild(js);
 
     var js = document.createElement("link");
     js.rel = "stylesheet";
-    js.href = "../css/switch.css";
+    js.href = "../reveal.js/css/switch.css";
     document.head.appendChild(js);
 
     var Px;
