@@ -18,7 +18,7 @@
     var prefix = "audio/";
     var suffix = ".m4a";
     var downloadSuffix = ".ogg";
-    var textToSpeechURL = "http://api.voicerss.org/?key=b2864547cd194e81afdb90f2a0dbe5a6&c=ogg&f=44khz_16bit_mono&r=1&hl=en-us&src="
+    var textToSpeechURL = "https://api.voicerss.org/?key=b2864547cd194e81afdb90f2a0dbe5a6&c=ogg&f=44khz_16bit_mono&r=1&hl=en-us&src="
         // var textToSpeechURL = "http://translate.google.com/translate_tts?ie=UTF-8&tl=en-us&client=t&total=1&idx=0&q="; // the text to speech converter
     var defaultDuration = 5; // value in seconds
     var playerOpacity = .05; // opacity when the mouse is far from to the audioplayer
@@ -37,12 +37,12 @@
 
     var js = document.createElement("link");
     js.rel = "stylesheet";
-    js.href = "http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css";
+    js.href = "../css/font-awesome.min.css";
     document.head.appendChild(js);
 
     var js = document.createElement("link");
     js.rel = "stylesheet";
-    js.href = "../reveal.js/css/switch.css";
+    js.href = "../css/switch.css";
     document.head.appendChild(js);
 
     var Px;
