@@ -217,6 +217,8 @@
         // Specifies if the transitions menu panel will be shown.
         transitions: true,
 
+
+        tools: true,
         // Adds a menu button to the slides to open the menu panel.
         // Set to 'false' to hide the button.
         openButton: true,
@@ -247,9 +249,11 @@
       { src: '../reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
       { src: '../reveal.js/plugin/audio-slideshow/slideshow-recorder.js', condition: function( ) { return !!document.body.classList; } },				
       { src: '../reveal.js/plugin/audio-slideshow/audio-slideshow.js', condition: function( ) { return !!document.body.classList; } },
+      { src: '../reveal.js/plugin/timer/timer.js', condition:function() {return !!document.body.classList; } },
+      { src: '../reveal.js/plugin/record-screen/record_screen.js', condition:function() {return !!document.body.classList; } },
       { src: '../reveal.js/plugin/math/math.js', async: true },
       { src: '../reveal.js/plugin/menu/menu.js' },
-      //{ src: '../reveal.js/plugin/title-footer/title-footer.js', async: true, callback: function() { title_footer.initialize("DIMACS Workshop on Network Coding: the Next 15 Years"); } }
+            //{ src: '../reveal.js/plugin/title-footer/title-footer.js', async: true, callback: function() { title_footer.initialize("DIMACS Workshop on Network Coding: the Next 15 Years"); } }
       {
           // maybe you put this in `plugins`
           src: '../reveal.js/plugin/svg-fragment/reveal-svg-fragment.js',
