@@ -28,7 +28,8 @@ THE SOFTWARE.
     local = proto === "file:",
     d3 = window.d3,
     defaults = {
-      d3: (local ? "http:" : proto) + "//cdn.jsdelivr.net/d3js/latest/d3.min.js",
+      //d3: (local ? "http:" : proto) + "//cdn.jsdelivr.net/d3js/latest/d3.min.js",
+	  d3: "../reveal.js/plugin/svg-fragment/d3.min.js",
       selector: "title"
     };
 
@@ -38,8 +39,12 @@ THE SOFTWARE.
     d3 = d3 || window.d3;
     var container = d3.selectAll("[data-svg-fragment]"),
       slides = d3.select(".slides");
-    
+	
     container.data(function(){
+      var _container = container;
+      if (container[0]) {
+        _container = container[0];
+      }
       return container[0].map(function(d){
         var $ = d3.select(d);
         return {
@@ -96,9 +101,14 @@ THE SOFTWARE.
         return this.parentNode === slide;
       }).each(function(item){
         
-        allFragments.forEach(function(element) {
+        for (var i = 0, len = allFragments.length; i < len; i++) {
+          var element = allFragments[i];
           api.toggle(element, item, false, show);
-        });
+        }
+
+        // allFragments.forEach(function(element) {
+        //   api.toggle(element, item, false, show);
+        // });
 
         api.toggleSlide(slide, item, show);
       });
@@ -125,16 +135,19 @@ THE SOFTWARE.
           var isCurrentVisible = allFragments[0][i].classList.contains("current-visible");
           var isCurrentFragment = allFragments[0][i].classList.contains("current-fragment");
           var isVisibleFragment = allFragments[0][i].classList.contains("visible");
-
-          if (isCurrentVisible && !isCurrentFragment) {
-              currentVisibleFragments.push(allFragments[0][i]);
-          };
-          if (isCurrentVisible && isCurrentFragment) {
-              currentVisibleShowFragments.push(allFragments[0][i]);
-          };
-
+		  /*if (isCurrentVisible && !isCurrentFragment) {
+			currentVisibleFragments.push(allFragments[0][i]);
+		  };
+		  if (isCurrentVisible && isCurrentFragment) {
+			currentVisibleShowFragments.push(allFragments[0][i]);
+		};*/
+		
           if (isVisibleFragment) {
-              visibleFragments.push(allFragments[0][i]);
+			  if (isCurrentVisible && !isCurrentFragment) {
+				invisibleFragments.push(allFragments[0][i])
+			  } else {
+				visibleFragments.push(allFragments[0][i]);
+			  }
           } else {
               invisibleFragments.push(allFragments[0][i]);
           }
@@ -145,13 +158,18 @@ THE SOFTWARE.
         return this === event.fragment.parentNode;
       }).each(function(item){
 		  //console.log(item);
+		  console.debug(currentVisibleFragments);
+		  console.debug(currentVisibleShowFragments);
+		  console.debug(visibleFragments);
+		  console.debug(invisibleFragments);
+		  /*
         currentVisibleFragments.forEach(function(element) {
           api.toggle(element, item, false, false);
         });
 
         currentVisibleShowFragments.forEach(function(element) {
           api.toggle(element, item, false, true);
-        });
+        }); */
 
         visibleFragments.forEach(function(element) {
           api.toggle(element, item, false, true);
@@ -213,7 +231,6 @@ THE SOFTWARE.
       height: "100%",
       viewBox: "0 0 "+ item.dims.width + " " + item.dims.height
     });
-
     return isPrintingPDF() ? api.showAll(item) :api.clean(item);
   };
 
@@ -242,9 +259,13 @@ THE SOFTWARE.
     container.filter(function(){
         return this.parentNode === previousSlide;
       }).each(function(item){
-        allFragments.forEach(function(element) {
-          api.toggle(element, item, false, false);
-        });
+        for(var i, len = allFragments.length; i<len; i++) {
+            var element = allFragments[i];
+            api.toggle(element, item, false, false);
+        }
+        // allFragments.forEach(function(element) {
+        //   api.toggle(element, item, false, false);
+        // });
     });
   }
 
@@ -267,16 +288,22 @@ THE SOFTWARE.
   api.init = function(){
     var options = Reveal.getConfig().svgFragment || {};
     if(window.d3){
-      api();
+      console.debug("1");
+      d3 = d3 || window.d3;
+        api();
     }else if(window.require){
+      console.debug("2");
       require([api.cfg("d3")], function(_d3){
         d3 = _d3;
-        api();
+          api();
       });
     }else{
+      console.debug("3");
       api.load(api.cfg("d3"), api);
     }
+
     return api;
+    
   };
 
 

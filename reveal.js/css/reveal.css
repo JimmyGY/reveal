@@ -173,7 +173,7 @@ html:-moz-full-screen-ancestor {
  *********************************************/
 .reveal .controls {
   display: none;
-  position: fixed;
+  position: absolute;
   width: 110px;
   height: 110px;
   z-index: 30;
@@ -1318,6 +1318,39 @@ html:-moz-full-screen-ancestor {
     width: 90%;
     left: 5%; } }
 
+/*********************************************
+ * SUBTITLE NOTES
+ *********************************************/
+.reveal .subtitle-notes {
+  display: none;
+  position: absolute;
+  width: 70%;
+  max-height: 15%;
+  left: 15%;
+  bottom: 0px;
+  padding: 10px;
+  z-index: 1;
+  font-size: 18px;
+  line-height: 1.4;
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.3);
+  overflow: auto;
+  box-sizing: border-box;
+  text-align: left;
+  font-family: Helvetica, sans-serif;
+  -webkit-overflow-scrolling: touch; }
+
+.reveal .subtitle-notes.visible:not(:empty) {
+  display: block; }
+
+@media screen and (max-width: 1024px) {
+  .reveal .subtitle-notes {
+    font-size: 14px; } }
+
+@media screen and (max-width: 600px) {
+  .reveal .subitle-notes {
+    width: 90%;
+    left: 5%; } }
 /*********************************************
  * ZOOM PLUGIN
  *********************************************/

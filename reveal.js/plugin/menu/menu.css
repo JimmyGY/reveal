@@ -225,7 +225,8 @@
  */
 
 .reveal div[data-panel="Themes"] li,
-.reveal div[data-panel="Transitions"] li {
+.reveal div[data-panel="Transitions"] li,
+.reveal div[data-panel="Tools"] li {
 	display: block;
 	text-align: left;
 	cursor: pointer;

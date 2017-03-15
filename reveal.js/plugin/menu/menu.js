@@ -6,6 +6,8 @@
 
 var RevealMenu = window.RevealMenu || (function(){
 	var config = Reveal.getConfig();
+	var separator = "!@#$%";
+	if (config.separator) separator = Reveal.getConfig().separator;
 	var options = config.menu || {};
 	options.path = options.path || scriptPath() || 'plugin/menu';
 
@@ -47,6 +49,8 @@ var RevealMenu = window.RevealMenu || (function(){
 				// transitions aren't support in IE9 anyway, so no point in showing them
 				transitions = false;
 			}
+			var tools = isPrintingPDF() ? false : options.tools;
+			if (typeof transitions === "undefined") tools = isPrintingPDF() ? false : true;
 			var openButton = options.openButton;
 			if (typeof openButton === "undefined") openButton = true;
 			var openSlideNumber = options.openSlideNumber;
@@ -197,6 +201,8 @@ var RevealMenu = window.RevealMenu || (function(){
 			//
 
 			function openMenu(event) {
+				document.getElementById("cp_container_1").style.display = "none";
+				//document.getElementById("show_notes_div").style.display = 'none';
 				if (event) event.preventDefault();
 				if (!isOpen()) {
 				    $('body').addClass('slide-menu-active');
@@ -226,6 +232,8 @@ var RevealMenu = window.RevealMenu || (function(){
 			    $('.slide-menu').removeClass('active');
 			    $('.slide-menu-overlay').removeClass('active');
 			    $('.slide-menu-panel li.selected').removeClass('selected');
+				document.getElementById("cp_container_1").style.display = "block";
+				document.getElementById("show_notes_div").style.display = "block";
 			}
 
 			function toggleMenu(event) {
@@ -295,8 +303,14 @@ var RevealMenu = window.RevealMenu || (function(){
 					.appendTo(toolbar)
 					.click(openPanel);
 			}
+			
 			if (transitions) {
 				$('<li data-panel="Transitions" data-button="' + (buttons++) + '" class="toolbar-panel-button"><span class="slide-menu-toolbar-label">Transitions</span><br/><i class="fa fa-arrows-h"></i></li>')
+					.appendTo(toolbar)
+					.click(openPanel);
+			}
+			if (tools) {
+				$('<li data-panel="Tools" data-button="' + (buttons++) + '" class="toolbar-panel-button"><span class="slide-menu-toolbar-label">Tools</span><br/><i class="fa fa-desktop"></i></li>')
 					.appendTo(toolbar)
 					.click(openPanel);
 			}
@@ -382,10 +396,13 @@ var RevealMenu = window.RevealMenu || (function(){
 			function subTitleItem(fragment, i, h, v, j) {
 				//console.debug(fragment);
 				var subTitleText = fragment.getAttribute('data-audio-text');
-				var subTitles = subTitleText.split('.');
+				if (fragment.getAttribute('data-audio-subtitle')) {
+					subTitleText = fragment.getAttribute('data-audio-subtitle');
+				} 
+				var subTitles = subTitleText.split(separator);
 				var subTitleItems = '<ul class="slide-menu-item-subtitles" style="display: block">';
-				for (var k = 0; k < subTitles.length-1; k++) {
-					subTitleItems += '<li class="slide-menu-item-subtitle" data-item"'+i+'" data-slide-h="'+ h + '" data-slide-v="' + v +'" data-slide-fragment-index="' + j +'" data-slide-subtitle-index = "'+ k +'">' + subTitles[k].trim().split(" ")[0] + '</li>';
+				for (var k = 0; k < subTitles.length; k++) {
+					subTitleItems += '<li class="slide-menu-item-subtitle" data-item"'+i+'" data-slide-h="'+ h + '" data-slide-v="' + v +'" data-slide-fragment-index="' + j +'" data-slide-subtitle-index = "'+ k +'">' + subTitles[k].trim() + '</li>';
 				}
 				subTitleItems += '</ul>';
 
@@ -402,7 +419,6 @@ var RevealMenu = window.RevealMenu || (function(){
 					// temp try
 					Reveal.slide(h, v, 0);
 					Reveal.navigateFragment(null, -1);
-
 					//closeMenu();
 				} else if (theme) {
 					$('#theme').attr('href', theme);
@@ -543,29 +559,32 @@ var RevealMenu = window.RevealMenu || (function(){
 
 				var icons = $('.slide-menu-item-fragment[data-slide-h="'+h+'"][data-slide-v="'+v+'"] > i');
 
-				for(let i of icons) {
-					if(i.classList.contains("fa-check-square-o")){
-						i.classList.remove("fa-check-square-o");
-						i.classList.add("fa-square-o");
-					}
-					else if(i.classList.contains("fa-square-o")){
-						i.classList.add("fa-check-square-o");
-						i.classList.remove("fa-square-o");
-					}
-				}
-
-
 				if(event.target.classList.contains("fa-check-square-o")){
 						event.target.classList.remove("fa-check-square-o");
 						event.target.classList.add("fa-square-o");
 						Reveal.displayPDFFragment(h,v,undefined,false);
+						
+						for(i=0; i<icons.length; i++) {
+							var icon = icons[i];
+							if(icon.classList.contains("fa-check-square-o")){
+								icon.classList.remove("fa-check-square-o");
+								icon.classList.add("fa-square-o");
+							}
+						}
 				}
 				else if(event.target.classList.contains("fa-square-o")){
 						event.target.classList.add("fa-check-square-o");
 						event.target.classList.remove("fa-square-o");
 						Reveal.displayPDFFragment(h,v,undefined,true);
+						
+						for(i=0; i<icons.length; i++) {
+							var icon = icons[i];
+							if(icon.classList.contains("fa-square-o")){
+								icon.classList.remove("fa-square-o");
+								icon.classList.add("fa-check-square-o");
+							}
+						}
 				}
-				
 			}
 
 			function subTitleClicked(event) {
@@ -695,6 +714,113 @@ var RevealMenu = window.RevealMenu || (function(){
 				})
 			}
 
+			if (tools) {
+				var panel = $('<div data-panel="Tools" class="slide-menu-panel"></div>').appendTo(panels);
+				var menu = $('<ul class="slide-menu-items"></ul>').appendTo(panel);	
+
+				// Subtitles
+				$('<li class="slide-menu-item" data-item="' + (3) + '">'+'Subtitles'+
+					'<i class="tools-subtitles-left fa fa-toggle-on" style="display:inline; margin-left:10px;"></i>'+
+					'<i class="tools-subtitles-right fa fa-toggle-off" style="display:none; margin-left:10px;"></i>'+
+					'</li>').appendTo(menu);
+									
+				$('.tools-subtitles-left')[0].addEventListener('click', function(event) {
+					$('.tools-subtitles-left')[0].style.display = "none";
+					$('.tools-subtitles-right')[0].style.display = "inline";					
+					Reveal.showSubtitle(true);
+					//closeMenu();
+				});
+				
+				$('.tools-subtitles-right')[0].addEventListener('click', function(event) {
+					Reveal.showSubtitle(false);
+					$('.tools-subtitles-right')[0].style.display = "none";
+					$('.tools-subtitles-left')[0].style.display = "inline";					
+					//closeMenu();
+				});
+				
+				
+				// Font
+				$('<li class="slide-menu-item" data-item="' + (0) + '">'+'Font'+
+					'<i class="tools-font-left fa fa-angle-double-left" style="display:inline; margin-left:10px;"></i>'+
+					'<i class="tools-font-right fa fa-angle-double-right" style="display:inline;"></i>'+
+					'</li>').appendTo(menu);
+					
+				$('.tools-font-left')[0].addEventListener('click', function(event) {
+					Reveal.changeFontSize(-1);
+				});
+				
+				$('.tools-font-right')[0].addEventListener('click', function(event) {
+					Reveal.changeFontSize(1);
+				});
+				
+				// Download
+				$('<li class="slide-menu-item" data-item="' + (1) + '">'+'Download'+
+					'<i class="tools-download fa fa-download" style="display:inline; margin-left:10px;"></i>'+
+					'</li>').appendTo(menu);
+					
+				$('.tools-download')[0].addEventListener('click', function(event) {
+					Reveal.downloadAudio();
+				});
+				
+				// Print
+				$('<li class="slide-menu-item" data-item="' + (2) + '">'+'Print'+
+					'<i class="tools-print fa fa-print" style="display:inline; margin-left:10px;"></i>'+
+					'</li>').appendTo(menu);
+					
+				$('.tools-print')[0].addEventListener('click', function(event) {
+					var url = window.location.href;
+					var url_array = url.split("#");
+					var print_str = "?print-pdf";
+					var new_url = url_array[0]+print_str;
+					//window.location.href = new_url;
+					window.open(
+						new_url,
+						'_blank' // <- This is what makes it open in a new window.
+					);
+				});
+				
+				// Timer
+				$('<li class="slide-menu-item" data-item="' + (3) + '">'+'Timer'+
+					'<i class="tools-timer-left fa fa-toggle-off" style="display:inline; margin-left:10px;"></i>'+
+					'<i class="tools-timer-right fa fa-toggle-on" style="display:none; margin-left:10px;"></i>'+
+					'</li>').appendTo(menu);
+					
+				
+				$('.tools-timer-left')[0].addEventListener('click', function(event) {
+					$('.tools-timer-left')[0].style.display = "none";
+					$('.tools-timer-right')[0].style.display = "inline";					
+					Reveal.timerSwitchMode(true);
+					//closeMenu();
+				});
+				
+				
+				$('.tools-timer-right')[0].addEventListener('click', function(event) {
+					Reveal.timerSwitchMode(false);
+					$('.tools-timer-right')[0].style.display = "none";
+					$('.tools-timer-left')[0].style.display = "inline";					
+					//closeMenu();
+				});
+				
+				// Record Screen
+				$('<li class="slide-menu-item" data-item="' + (4) + '">'+'Record Screen'+
+					'<i class="tools-record-left fa fa-file-video-o" style="display:inline; margin-left:10px;"></i>'+
+					//'<i class="tools-record-right fa fa-toggle-on" style="display:none; margin-left:10px;"></i>'+
+					'</li>').appendTo(menu);
+					
+				$('.tools-record-left')[0].addEventListener('click', function(event) {
+					//$('.tools-record-left')[0].style.display = "none";
+					//$('.tools-record-right')[0].style.display = "inline";	
+					Reveal.recordSwitchMode(true);
+					closeMenu();
+				});
+				
+				//$('.tools-record-right')[0].addEventListener('click', function(event) {
+				//	Reveal.recordSwitchMode(false);
+				//	$('.tools-record-right')[0].style.display = "none";
+				//	$('.tools-record-left')[0].style.display = "inline";	
+				//	closeMenu();
+				//});
+			}
 			//
 			// Open menu options
 			//
