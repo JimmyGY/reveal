@@ -25,7 +25,7 @@
     var startAtFragment = false; // when moving to a slide start at the current fragment or at the start of the slide
     var autoDownLoadAudio = false;
     //var separator = ".";
-    separator = "!@#$%";
+    var separator = "!@#$%";
 
     // ------------------
     var fontSize = 25;
@@ -40,10 +40,14 @@
     js.href = "../reveal.js/css/font-awesome.min.css";
     document.head.appendChild(js);
 
-    var js = document.createElement("link");
-    js.rel = "stylesheet";
-    js.href = "../reveal.js/css/switch.css";
-    document.head.appendChild(js);
+    var css = document.createElement("link");
+    css.rel = "stylesheet";
+    css.href = "../reveal.js/css/switch.css";
+    document.head.appendChild(css);
+
+    var script = document.createElement("script");
+    script.src = 'https://code.responsivevoice.org/responsivevoice.js';
+    document.body.appendChild(script);
 
     var Px;
     var py;
@@ -65,6 +69,8 @@
     var show = true;
     var dragRegion = true;
 	
+    var editMode = false;
+
 	var dataTransferx;
     var dataTransfery;
     var dataTransferMouseX;
@@ -155,8 +161,8 @@
             });
 
             myCirclePlayer.player.bind(jQuery.jPlayer.event.play, function(event) {
-                console.debug("play");
-                currentAudio.dispatchEvent(new Event('play'));
+                //responsiveVoice.speak("Hello World");
+                //currentAudio.dispatchEvent(new Event('play'));
             });
 
             myCirclePlayer.player.bind(jQuery.jPlayer.event.ended, function(event) {
@@ -168,6 +174,7 @@
             /*jQuery("#jquery_jplayer_1").jPlayer("setMedia", {
                 oga: currentAudio.childNodes[0].src
             });*/
+            
             myCirclePlayer.setMedia({
                 //oga: currentAudio.childNodes[0].src
 				//oga: currentAudio.childNodes[1].src
@@ -233,8 +240,6 @@
             for (var i = 0; i < currentAudio.childNodes.length; i++) {
                 if (currentAudio.childNodes[i].name == "audio-src-online") {
                     var content = currentAudio.childNodes[i].src;
-                    
-                    
 
                      fetch(content).then(function(resp){
                              return resp.blob();
@@ -277,7 +282,8 @@
             //console.debug("circleplayer");
             myCirclePlayer.player.bind(jQuery.jPlayer.event.play, function(event) {
                 console.debug('play');
-                currentAudio.dispatchEvent(new Event('play'));
+                //responsiveVoice.speak("Hello World")
+                //currentAudio.dispatchEvent(new Event('play'));
 
             });
 
@@ -433,6 +439,8 @@
         if (Reveal.getConfig().audioPlayerOpacity) playerOpacity = Reveal.getConfig().audioPlayerOpacity;
         if (Reveal.getConfig().separator) separator = Reveal.getConfig().separator;
         if (Reveal.getConfig().dragRegion) dragRegion = Reveal.getConfig().dragRegion;
+        
+        if (Reveal.getConfig().aceEditMode) editMode = Reveal.getConfig().aceEditMode;
         if (Reveal.getConfig().autoDownLoadAudio != undefined) autoDownLoadAudio = Reveal.getConfig().autoDownLoadAudio;
         if ('ontouchstart' in window || navigator.msMaxTouchPoints) {
             opacity = 1;
@@ -469,27 +477,29 @@
         var subTitleRegion = document.getElementById("subTitleRegion");
         if (subTitleRegion == null) {
             subTitleRegion = document.createElement('div');
+            
             subTitleRegion.id = "subTitleRegion";
             subTitleRegion.setAttribute('style', "position: fixed;  z-index: 10;top:" + (1 - subTitleRegionProportion) * 100 + "%;bottom:0px; left:0px; right:0px;");
+            //subTitleRegion.appendChild(subTitleFrame)
         }
         document.body.appendChild(subTitleRegion);
         for (var h = 0, len1 = horizontalSlides.length; h < len1; h++) {
             var verticalSlides = horizontalSlides[h].querySelectorAll('section');
             if (!verticalSlides.length) {
-                setupAllAudioElements(divElement, h, 0, horizontalSlides[h]);
+                setupAllAudioElements(divElement, h, 0, horizontalSlides[h], editMode);
             } else {
                 for (var v = 0, len2 = verticalSlides.length; v < len2; v++) {
-                    setupAllAudioElements(divElement, h, v, verticalSlides[v]);
+                    setupAllAudioElements(divElement, h, v, verticalSlides[v], editMode);
                 }
             }
         }
     }
 
-    function setupAllAudioElements(container, h, v, slide) {
-        setupAudioElement(container, h + '.' + v + ".0", slide.getAttribute('data-audio-src'), slide.getAttribute('data-audio-text'), slide.querySelector(':not(.fragment) > video[data-audio-controls]'), slide.getAttribute('data-audio-subtitle'));
+    function setupAllAudioElements(container, h, v, slide, editMode) {
+        setupAudioElement(container, h + '.' + v + ".0", slide.getAttribute('data-audio-src'), slide.getAttribute('data-audio-text'), slide.querySelector(':not(.fragment) > video[data-audio-controls]'), slide.getAttribute('data-audio-subtitle'), editMode);
         var fragments = slide.querySelectorAll('.fragment');
         for (var f = 0, len = fragments.length; f < len; f++) {
-            setupAudioElement(container, h + '.' + v + '.' + (parseInt(fragments[f].getAttribute('data-fragment-index')) + 1), fragments[f].getAttribute('data-audio-src'), fragments[f].getAttribute('data-audio-text'), fragments[f].querySelector('video[data-audio-controls]'), fragments[f].getAttribute('data-audio-subtitle'));
+            setupAudioElement(container, h + '.' + v + '.' + (parseInt(fragments[f].getAttribute('data-fragment-index')) + 1), fragments[f].getAttribute('data-audio-src'), fragments[f].getAttribute('data-audio-text'), fragments[f].querySelector('video[data-audio-controls]'), fragments[f].getAttribute('data-audio-subtitle'), editMode);
         }
 
     }
@@ -499,7 +509,7 @@
             videoElement.currentTime = audioElement.currentTime;
         });
         audioElement.addEventListener('play', function(event) {
-            console.debug("play event");
+            //console.debug("play event");
             videoElement.currentTime = audioElement.currentTime;
             if (videoElement.paused) videoElement.play();
         });
@@ -526,7 +536,7 @@
     }
 
 
-    function setupAudioElement(container, indices, audioFile, text, videoElement, subtitle) {
+    function setupAudioElement(container, indices, audioFile, text, videoElement, subtitle, editMode) {
         var subTitleRegion = document.getElementById("subTitleRegion");
         textArray = text.split(separator);
         if (subtitle == null) {
@@ -549,6 +559,7 @@
             //labelElement.setAttribute('style', "position: fixed; font-size:25px ; font-family: 'Times New Roman'; left:8%; right: 8%; height: " + subTitleRegion.offsetHeight + "px; width :" + subTitleRegion.offsetWidth * 0.84 + "px;");
             labelElement.setAttribute('style', "position: fixed; font-size:25px ; font-family: 'Times New Roman'; left:8%; right: 8%; height: " + subTitleRegion.offsetHeight + "px; width : 80%;");
             labelElement.id = "label-" + indices + "." + i;
+            // GY 3.22
             labelElement.className = "subTitleContent";
             labelElement.style.display = "none";
             labelElement.style.zIndex = "1000";
@@ -811,21 +822,49 @@
 
             }
 
-            var labelContent = document.createElement('div');
-            labelContent.name = "content";
+            var labelContent;
+            if (editMode) {
+                labelContent = document.createElement('iframe');
+                labelContent.className = 'ace';
+                labelContent.name = "content";
+                labelContent.frameBorder = "0";
+            } else {
+                labelContent = document.createElement('div');
+            }
             //labelContent.setAttribute('style', "position: relative ; z-index = 1000; left: 10px; top : 10px; overflow: auto; height: " + (subTitleRegion.offsetHeight - 20) + "px; width :" + (subTitleRegion.offsetWidth * 0.84 - 20) + "px;");
-            labelContent.setAttribute('style', "position: relative ; z-index = 1000; left: 10px; top : 10px; overflow: auto; height: " + (subTitleRegion.offsetHeight - 20) + "px; width : 100%");
+            labelContent.setAttribute('style', "position: relative ; z-index = 1000; left: 10px; top : 10px; overflow: auto; height: " + (subTitleRegion.offsetHeight - 20) + "px; width : 100%;");
             if (i < subtitleArray.length) {
                 if (subtitleArray[i].trim() == "") {
-                    //labelElement.innerText = textArray[i].trim().split(" ")[0];
-                    labelContent.innerText = textArray[i].trim();
+                    
+                    //labelContent.innerText = textArray[i].trim();
+                    // GY 3.22
+                    text = textArray[i].trim();
+                    //labelContent.src = "data:text/html;charset=utf-8," + escape(text);
+                    if (editMode) {
+                        labelContent.innerHTML = text;
+                    } else {
+                        labelContent.innerText = text;
+                    }
                 } else {
-                    labelContent.innerText = subtitleArray[i].trim();
+                    text = subtitleArray[i].trim();
+                    //labelContent.innerText = subtitleArray[i].trim(text);
+                    //labelContent.src = "data:text/html;charset=utf-8," + escape(text);
+                    if (editMode) {
+                        labelContent.innerHTML = text;
+                    } else {
+                        labelContent.innerText = text;
+                    }
                 }
 
             } else {
-                //labelElement.innerText = textArray[i].trim().split(" ")[0];
-                labelContent.innerText = textArray[i].trim();
+                // labelContent.innerText = textArray[i].trim();
+                text = textArray[i].trim();
+                if (editMode) {
+                    labelContent.innerHTML = text;
+                } else {
+                    labelContent.innerText = text;
+                }
+
             }
             labelElement.appendChild(leftUpResizer);
             labelElement.appendChild(rightUpResizer);
@@ -919,19 +958,7 @@
                         nextAudio.load();
                     }
 
-
-                    /*if (textToSpeechURL != null && text != null && autoDownLoadAudio) {
-						
-                        var content = textToSpeechURL + encodeURIComponent(text);
-                        var aLink = document.createElement('a');
-                        var blob = new Blob([content]);
-                        var evt = document.createEvent("HTMLEvents");
-                        evt.initEvent("click");
-                        aLink.href = URL.createObjectURL(blob);
-                        aLink.download = name + "." + i + ".ogg";
-                        //aLink.dispatchEvent(evt);
-						aLink.click();
-                    }*/
+                    //responsivevoice.speak(text);
 
                 }
             })(i, indices, textArray[i]));

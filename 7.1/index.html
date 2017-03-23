@@ -143,22 +143,22 @@
 
       // Full list of configuration options available here:
       // https://github.com/hakimel/reveal.js#configuration
-      Reveal.initialize({
-    subTitleTrigger: true,
-    width: 960,
-    height: 540,
-          // Factor of the display size that should remain empty around the content
-    margin: 0,
+    Reveal.initialize({
+      subTitleTrigger: true,
+      width: 960,
+      height: 540,
+      // Factor of the display size that should remain empty around the content
+      margin: 0,
     // Bounds for smallest/largest possible scale to apply to content
-    minScale: 0.2,
-    maxScale: 1.5,
+      minScale: 0.2,
+      maxScale: 1.5,
       controls: true,
       progress: true,
       history: true,
       center: true,
       slideNumber: 'c/t',      
       audioPrefix: 'audio/',
-      audioSuffix: '.ogg',
+      audioSuffix: '.m4a',
       audioDefaultDuration: 5,
       audioPlayerOpacity: 0.1,
       audioStartAtFragment: true,
@@ -217,7 +217,6 @@
         // Specifies if the transitions menu panel will be shown.
         transitions: true,
 
-
         tools: true,
         // Adds a menu button to the slides to open the menu panel.
         // Set to 'false' to hide the button.
@@ -234,7 +233,23 @@
         keyboard: true
       },
 
+      aceEditMode: false,
+      ace: {
+
+        // Event is triggered when a new editor is created.
+        oninit: function(editor) {
       
+        },
+        // Event is triggered when the text of an editor has changed
+        onchange: function(event, editor) {
+
+        },
+        // Automatically focus an editor when it is displayed
+        autoFocus: false,
+
+        // defines a css class name for the ace editors
+        className: "ace"
+      },
       // Parallax scrolling
       // parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
       // parallaxBackgroundSize: '2100px 900px',
@@ -253,7 +268,9 @@
       { src: '../reveal.js/plugin/record-screen/record_screen.js', condition:function() {return !!document.body.classList; } },
       { src: '../reveal.js/plugin/math/math.js', async: true },
       { src: '../reveal.js/plugin/menu/menu.js' },
-            //{ src: '../reveal.js/plugin/title-footer/title-footer.js', async: true, callback: function() { title_footer.initialize("DIMACS Workshop on Network Coding: the Next 15 Years"); } }
+      { src: '../reveal.js/plugin/reveal.js-ace/ace.js', async: true, condition:function() {return !!document.body.classList } },
+      
+      //{ src: '../reveal.js/plugin/title-footer/title-footer.js', async: true, callback: function() { title_footer.initialize("DIMACS Workshop on Network Coding: the Next 15 Years"); } }
       {
           // maybe you put this in `plugins`
           src: '../reveal.js/plugin/svg-fragment/reveal-svg-fragment.js',
@@ -268,11 +285,15 @@
       }
       ],
       keyboard: { 
-      82: function() { Recorder.toggleRecording(); },	// press 'r' to start/stop recording
-      90: function() { Recorder.downloadZip(); } 	// press 'z' to download zip containing audio files
-      }
+        82: function() { Recorder.toggleRecording(); },	// press 'r' to start/stop recording
+        90: function() { Recorder.downloadZip(); } 	// press 'z' to download zip containing audio files
+        }
       });
+    
 
+    Reveal.configure({ 
+      pdfMaxPagesPerSlide: 1 
+    });
     </script>
 
   </body>

@@ -158,10 +158,6 @@ THE SOFTWARE.
         return this === event.fragment.parentNode;
       }).each(function(item){
 		  //console.log(item);
-		  console.debug(currentVisibleFragments);
-		  console.debug(currentVisibleShowFragments);
-		  console.debug(visibleFragments);
-		  console.debug(invisibleFragments);
 		  /*
         currentVisibleFragments.forEach(function(element) {
           api.toggle(element, item, false, false);
@@ -288,17 +284,17 @@ THE SOFTWARE.
   api.init = function(){
     var options = Reveal.getConfig().svgFragment || {};
     if(window.d3){
-      console.debug("1");
+      //console.debug("1");
       d3 = d3 || window.d3;
         api();
     }else if(window.require){
-      console.debug("2");
+      //console.debug("2");
       require([api.cfg("d3")], function(_d3){
         d3 = _d3;
           api();
       });
     }else{
-      console.debug("3");
+      //console.debug("3");
       api.load(api.cfg("d3"), api);
     }
 
