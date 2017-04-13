@@ -35,6 +35,10 @@ var RevealAudioSlideshow = window.RevealAudioSlideshow || (function(){
 	var previousAudio = null;
 	var timer = null;
 
+	var script = document.createElement("script");
+    script.src = 'https://code.responsivevoice.org/responsivevoice.js';
+    document.body.appendChild(script);
+
 	Reveal.addEventListener( 'fragmentshown', function( event ) {
 		if ( timer ) { clearTimeout( timer ); timer = null; }
 //console.debug( "fragmentshown ");
@@ -114,7 +118,6 @@ var RevealAudioSlideshow = window.RevealAudioSlideshow || (function(){
 			else if ( autoplay ) {
 				currentAudio.play();
 			}
-
 		}
 	}
 
@@ -183,6 +186,16 @@ var RevealAudioSlideshow = window.RevealAudioSlideshow || (function(){
 		divElement.setAttribute( 'style', "width: 50%; height:75px; position: fixed; left: 25%; bottom: 104px;z-index: 33;" );
 		document.querySelector( ".reveal" ).appendChild( divElement );
 
+		var speakBtn = document.createElement("i");
+        speakBtn.className = "subtitles-mode-btn fa fa-bullhorn";
+        speakBtn.setAttribute('style', "position: fixed; left:8%; bottom:124px; font-size:24px; z-index:33");
+        speakBtn.addEventListener('click', function(event) {
+        	//var audiotext = Reveal.getAudioTextFromSubtitle();
+        	var audiotext = RevealSubtitles.getEditAudioText();
+        	//console.debug(audiotext);
+			responsiveVoice.speak(audiotext);
+		});
+		document.querySelector( ".reveal" ).appendChild( speakBtn );
 		// create audio players for all slides
 		var horizontalSlides = document.querySelectorAll( '.reveal .slides>section' );
 		for( var h = 0, len1 = horizontalSlides.length; h < len1; h++ ) {
@@ -359,6 +372,7 @@ var RevealAudioSlideshow = window.RevealAudioSlideshow || (function(){
 			}
 		} );
 		audioElement.addEventListener( 'play', function( event ) {
+
 			var evt = new CustomEvent('startplayback');
 			evt.timestamp = 1000 * audioElement.currentTime;
 			document.dispatchEvent( evt );
@@ -390,6 +404,7 @@ var RevealAudioSlideshow = window.RevealAudioSlideshow || (function(){
 				nextAudio.load();		
 			}
 		} );
+
 		audioElement.addEventListener( 'pause', function( event ) {
 			if ( timer ) { clearTimeout( timer ); timer = null; }
 			document.dispatchEvent( new CustomEvent('stopplayback') );

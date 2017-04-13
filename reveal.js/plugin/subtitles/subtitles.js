@@ -1,6 +1,8 @@
 
 var RevealSubtitles = window.RevealSubtitles || (function(){
 
+	var Subtitles;
+
     var regionProportion = 0.15;
     var defaultSubtitle = "Input subtitle here";
     var defaultAudioText = "Input audio text here";
@@ -64,10 +66,14 @@ var RevealSubtitles = window.RevealSubtitles || (function(){
 			var subTitleRegion = document.getElementById("subTitleRegion");
 			subTitleRegion.style.visibility = "visible";
 			currentSubtitle.style.visibility = "visible";
-			
-
 		}
 	});
+
+	Reveal.addEventListener( 'getAudioText', function( event ) {
+		console.debug("getAudioText");
+		//selectSubtitle();
+	} );
+
 	function setup() {
 		var config = Reveal.getConfig().subtitles;
 		if (config) {
@@ -184,13 +190,22 @@ var RevealSubtitles = window.RevealSubtitles || (function(){
         labelEditText.innerHTML = "Audio Text";
         labelEditText.style.fontSize = editLabelFontSize + "px";
         var textEditArea = document.createElement('textarea');
+        textEditArea.className="text-edit-area";
         textEditArea.innerText = audiotext;
         var labelEditSubtitle = document.createElement('label');
         labelEditSubtitle.className = "subtitle-edit-label";
         labelEditSubtitle.innerHTML = "Subtitle";
         labelEditSubtitle.style.fontSize = editLabelFontSize + "px";
         var subtitleEditArea = document.createElement('textarea');
+        subtitleEditArea.className="subtitle-edit-area";
         subtitleEditArea.innerText = subtitle;
+        subtitleEditArea.addEventListener('change', function(event) {
+   			currentSubtitle = getCurrentSubtitle();
+			var subtitleContentDiv;
+
+			subtitleContentDiv = currentSubtitle.querySelector(".subtitle-content-div");
+			subtitleContentDiv.innerText = getEditSubtitle();
+        });
 
         subtitleEditCol1.appendChild(labelEditSubtitle);
         subtitleEditCol1.appendChild(subtitleEditArea);
@@ -288,7 +303,51 @@ var RevealSubtitles = window.RevealSubtitles || (function(){
         	subtitleEditElement.style.display = "none";
 	    	console.error("Subtitle Invalid mode, cannot change mode.");
 	    }
-
 	}
 
+	function getCurrentSubtitle() {
+		if (currentSubtitle) {
+			return currentSubtitle;
+		} else {
+			var indices = Reveal.getIndices();
+		    var id = "subtitle-" + indices.h + "." + indices.v;
+		    if (indices.f != undefined && indices.f >= 0) id = id + "." + (parseInt(indices.f) + 1) + ".0";
+		    else id = id + '.0.0';
+
+		    currentSubtitle = document.getElementById(id);
+		    return currentSubtitle;
+		}
+	}
+
+	function getEditAudioText() {
+
+        currentSubtitle = getCurrentSubtitle();
+        var textEditArea;
+
+		textEditArea = currentSubtitle.querySelector(".text-edit-area");
+
+		return textEditArea.value;
+	}
+
+	function getEditSubtitle() {
+        currentSubtitle = getCurrentSubtitle();
+        var subtitleEditArea;
+
+		subtitleEditArea = currentSubtitle.querySelector(".subtitle-edit-area");
+
+		return subtitleEditArea.value;
+	}
+
+	function getSubtitleContent() {
+		currentSubtitle = getCurrentSubtitle();
+		var subtitleContent;
+
+		subtitleContent = currentSubtitle.querySelector(".subtitle-content-div");
+		return subtitleContent.innerText;
+	}
+
+	Subtitles = {
+		getEditAudioText : getEditAudioText
+	};
+	return Subtitles;
 })();

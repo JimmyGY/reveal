@@ -3755,18 +3755,25 @@
 		} );
 	}
 	
+	function getAudioTextFromSubtitle() {
+		dispatchEvent( 'getAudioText', {
+			
+		});
+	}
+
 	function audioTextChanged(text) {
 		dispatchEvent( 'audioTextChanged', {
 			'text': text
 		});
 	}
 
+
+
 	function showSubtitle(show) {
 		dispatchEvent( 'showSubtitle', {
 				'show': show
 		} );
 	}
-	
 	
 	function changeFontSize(size) {
 		dispatchEvent( 'changeFontSize', {
@@ -5006,6 +5013,8 @@
 
 		getSlideSubTitles : getSlideSubTitles,
 		
+		getAudioTextFromSubtitle : getAudioTextFromSubtitle,
+
 		selectAudio : selectAudio,
 		
 		audioTextChanged : audioTextChanged,
