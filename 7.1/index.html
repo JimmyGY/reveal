@@ -53,9 +53,9 @@
     <img id="inclogo" src="INC.svg" class="imageposition-inclogo desktop-image">
     <img id="unilogo" src="CUHK.svg" class="imageposition-unilogo desktop-image">
 --> 		<section 
-             data-audio-subtitle="In the previous lectures, we introduced the concept of a vector and showed how vector calculus can be applied to engineering. Vectors are useful in engineering because, unlike scalars, they can capture both the magnitude and the direction in two or three dimensional space. Hence, they can be used to represent curves, surfaces or a region in space. Physical phenomena such as force and temperature in space can be described using the scalar or vector functions. Physical properties can be described or computed using the differential or integral calculus, such as the gradient, divergence, curl, line integral, surface integral or triple integral. There are also integral theorems that allow us to compute the integrals, or convert one integral into another to simplify the computation. In this section, we will generalize concept of vectors even further to a structure called the matrix. Similar to the vectors, we can define some operations such as addition and multiplication. Such operations are called linear algebra. Linear algebra is widely used in engineering because it is capable of modeling many practical problems. It also provide simple and computable solutions to these problems. The google search engine, for instance, use linear algebra to compute the page rank of the web pages.
-"
-             data-audio-text="In the previous lectures, we introduced the concept of a vector and showed how vector calculus can be applied to engineering. Vectors are useful in engineering because, unlike scalars, they can capture both the magnitude and the direction in two or three dimensional space. Hence, they can be used to represent curves, surfaces or a region in space. Physical phenomena such as force and temperature in space can be described using the scalar or vector functions. Physical properties can be described or computed using the differential or integral calculus, such as the gradient, divergence, curl, line integral, surface integral or triple integral. There are also integral theorems that allow us to compute the integrals, or convert one integral into another to simplify the computation. In this section, we will generalize concept of vectors even further to a structure called the matrix. Similar to the vectors, we can define some operations such as addition and multiplication. Such operations are called linear algebra. Linear algebra is widely used in engineering because it is capable of modeling many practical problems. It also provide simple and computable solutions to these problems. The google search engine, for instance, use linear algebra to compute the page rank of the web pages.
+             data-audio-subtitle="In this section, we will generalize concept of vectors even further to a structure called the matrix. Similar to the vectors, we can define some operations such as addition and multiplication. Such operations are called linear algebra. Linear algebra is widely used in engineering because it is capable of modeling many practical problems. It also provide simple and computable solutions to these problems. The google search engine, for instance, use linear algebra to compute the page rank of the web pages."
+
+             data-audio-text="In this section, we will generalize concept of vectors even further to a structure called the matrix. Similar to the vectors, we can define some operations such as addition and multiplication. Such operations are called linear algebra. Linear algebra is widely used in engineering because it is capable of modeling many practical problems. It also provide simple and computable solutions to these problems. The google search engine, for instance, use linear algebra to compute the page rank of the web pages.
  ">
         <h3 style="display:none;">Matrices, Vectors</h3>
         	        	        <div data-svg-fragment="svg/0.svg#[*|label='Layer 1']">
@@ -157,11 +157,13 @@
       history: true,
       center: true,
       slideNumber: 'c/t',      
-      audioPrefix: 'audio/',
-      audioSuffix: '.m4a',
-      audioDefaultDuration: 5,
-      audioPlayerOpacity: 0.1,
-      audioStartAtFragment: true,
+      audio: {
+        prefix: 'audio/',
+        suffix: '.m4a',
+        defaultDuration: 5,
+        playerOpacity: 0.1,
+        startAtFragment: true
+      },
 
       //audioTextToSpeechURL: "http://api.voicerss.org/?key=f9abfde7f05d494dac86a30dfa78f1b0&c=ogg&f=48khz_16bit_stereo&r=1&hl=en-us&src=",
 
@@ -171,8 +173,8 @@
       transition: 'slide', // none/fade/slide/convex/concave/zoom
       transitionSpeed: 'fast',
       math: {
-      mathjax: 'https://cdn.mathjax.org/mathjax/latest/MathJax.js',
-      config: 'TeX-MML-AM_HTMLorMML'  // See http://docs.mathjax.org/en/latest/config-files.html
+        mathjax: 'https://cdn.mathjax.org/mathjax/latest/MathJax.js',
+        config: 'TeX-MML-AM_HTMLorMML'  // See http://docs.mathjax.org/en/latest/config-files.html
       },
      
       menu: {
@@ -217,7 +219,9 @@
         // Specifies if the transitions menu panel will be shown.
         transitions: true,
 
+        // Specifies if the tools menu panel will be shown.
         tools: true,
+
         // Adds a menu button to the slides to open the menu panel.
         // Set to 'false' to hide the button.
         openButton: true,
@@ -242,7 +246,7 @@
         },
         // Event is triggered when the text of an editor has changed
         onchange: function(event, editor) {
-
+            Reveal.audioTextChanged(editor.getValue());
         },
         // Automatically focus an editor when it is displayed
         autoFocus: false,
@@ -262,8 +266,9 @@
       { src: '../reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
       { src: '../reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
       { src: '../reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
-      { src: '../reveal.js/plugin/audio-slideshow/slideshow-recorder.js', condition: function( ) { return !!document.body.classList; } },				
-      { src: '../reveal.js/plugin/audio-slideshow/audio-slideshow.js', condition: function( ) { return !!document.body.classList; } },
+      { src: '../reveal.js/plugin/audio-slideshow-new/slideshow-recorder.js', condition: function( ) { return !!document.body.classList; } },				
+      { src: '../reveal.js/plugin/audio-slideshow-new/audio-slideshow.js', condition: function( ) { return !!document.body.classList; } },
+      { src: '../reveal.js/plugin/subtitles/subtitles.js', condition: function( ) { return !!document.body.classList; } },
       { src: '../reveal.js/plugin/timer/timer.js', condition:function() {return !!document.body.classList; } },
       { src: '../reveal.js/plugin/record-screen/record_screen.js', condition:function() {return !!document.body.classList; } },
       { src: '../reveal.js/plugin/math/math.js', async: true },

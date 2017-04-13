@@ -201,7 +201,7 @@ var RevealMenu = window.RevealMenu || (function(){
 			//
 
 			function openMenu(event) {
-				document.getElementById("cp_container_1").style.display = "none";
+				//document.getElementById("cp_container_1").style.display = "none";
 				//document.getElementById("show_notes_div").style.display = 'none';
 				if (event) event.preventDefault();
 				if (!isOpen()) {

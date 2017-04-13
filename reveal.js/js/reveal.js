@@ -3755,6 +3755,12 @@
 		} );
 	}
 	
+	function audioTextChanged(text) {
+		dispatchEvent( 'audioTextChanged', {
+			'text': text
+		});
+	}
+
 	function showSubtitle(show) {
 		dispatchEvent( 'showSubtitle', {
 				'show': show
@@ -5002,8 +5008,10 @@
 		
 		selectAudio : selectAudio,
 		
+		audioTextChanged : audioTextChanged,
+
 		showSubtitle : showSubtitle,
-		
+
 		changeFontSize : changeFontSize,
 		
 		downloadAudio : downloadAudio,

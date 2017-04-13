@@ -195,6 +195,32 @@
 		}
     });
 
+    Reveal.addEventListener('audioTextChanged', function(event) {
+        var text = event.text;
+        console.debug('audioTextChanged');
+
+        var indices = Reveal.getIndices();
+        var textChangedSlide;
+
+        var horizontalSlides = document.querySelectorAll('.reveal .slides>section');
+        document.querySelector(".reveal").setAttribute('style', "width:100%; left : 0px; height:" + (1 - subTitleRegionProportion) * 100 + "%;");
+        
+        var subTitleRegion = document.getElementById("subTitleRegion");
+
+        var verticalSlides = horizontalSlides[indices.h].querySelectorAll('section');
+        if (!verticalSlides.length) {
+            textChangedSlide = horizontalSlides[indices.h];
+        } else {
+            textChangedSlide = verticalSlides[indices.v];
+        }
+        console.debug(textChangedSlide);
+
+        textChangedSlide.setAttribute("data-audio-subtitle", text);
+
+        console.debug(textChangedSlide);
+
+    });
+
 	Reveal.addEventListener('showSubtitle', function(event) {
 		show = !show;
 		if (!show) {
@@ -473,7 +499,9 @@
 
         // create audio players for all slides
         var horizontalSlides = document.querySelectorAll('.reveal .slides>section');
+        
         document.querySelector(".reveal").setAttribute('style', "width:100%; left : 0px; height:" + (1 - subTitleRegionProportion) * 100 + "%;");
+        
         var subTitleRegion = document.getElementById("subTitleRegion");
         if (subTitleRegion == null) {
             subTitleRegion = document.createElement('div');
@@ -483,6 +511,7 @@
             //subTitleRegion.appendChild(subTitleFrame)
         }
         document.body.appendChild(subTitleRegion);
+        
         for (var h = 0, len1 = horizontalSlides.length; h < len1; h++) {
             var verticalSlides = horizontalSlides[h].querySelectorAll('section');
             if (!verticalSlides.length) {
@@ -824,6 +853,7 @@
 
             var labelContent;
             if (editMode) {
+
                 labelContent = document.createElement('iframe');
                 labelContent.className = 'ace';
                 labelContent.name = "content";

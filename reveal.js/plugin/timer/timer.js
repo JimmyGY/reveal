@@ -31,7 +31,6 @@
 	} );
 
 	Reveal.addEventListener( 'slidechanged', function( event ) {
-		console.debug( "slidechanged ");
 		selectTimer();
 	} );
 
