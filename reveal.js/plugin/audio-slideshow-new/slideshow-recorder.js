@@ -144,7 +144,7 @@ var Recorder = {
 				Recorder.filename = null;
 			}
 		} );
-		this.indices = null;	
+		this.indices = null;
 		
 	}
 
@@ -168,6 +168,7 @@ var Recorder = {
 			this.filename = this.filename + '.' + this.indices.f;
 		}
 		this.recordRTC.stopRecording( function( url ) {
+			Recorder.recordedAudio.download = url;
 			// add audio URL to slide
 			Recorder.recordedAudio.src = url;
 			// add audio to zip
