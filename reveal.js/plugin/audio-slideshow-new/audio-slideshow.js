@@ -34,10 +34,12 @@ var RevealAudioSlideshow = window.RevealAudioSlideshow || (function(){
 	var currentAudio = null;
 	var previousAudio = null;
 	var timer = null;
+	var hasRecorded = false;
 
 	var recordBtn;
 	var pauseResBtn;
 	var stopBtn;
+	var downloadBtn;
 
 	// var script = document.createElement("script");
  //    script.src = 'https://code.responsivevoice.org/responsivevoice.js';
@@ -209,9 +211,16 @@ var RevealAudioSlideshow = window.RevealAudioSlideshow || (function(){
         stopBtn.addEventListener('click', onStopBtnClicked);
         stopBtn.disabled = true;
 
+        downloadBtn = document.createElement("input");
+        downloadBtn.id = "downloadButton";
+        downloadBtn.setAttribute("type","button");
+        downloadBtn.setAttribute("value", "Download");
+        downloadBtn.addEventListener('click', onDownloadBtnClicked);
+
         divElement.appendChild(recordBtn);
         divElement.appendChild(pauseResBtn);
         divElement.appendChild(stopBtn);
+        divElement.appendChild(downloadBtn);
 
 		document.querySelector( ".reveal" ).appendChild( divElement );
 
@@ -493,6 +502,8 @@ var RevealAudioSlideshow = window.RevealAudioSlideshow || (function(){
 		pauseResBtn.disabled = true;
 		stopBtn.disabled = true;
 
+		hasRecorded = true;
+
 	}
 
 	function onPauseResumeClicked() {
@@ -509,6 +520,40 @@ var RevealAudioSlideshow = window.RevealAudioSlideshow || (function(){
 		}
 		recordBtn.disabled = true;
 		pauseResBtn.disabled = false;
+	}
+
+	function onDownloadBtnClicked() {
+		if (hasRecorded) {
+			Recorder.downloadZip();
+		} else {
+			var indices = Reveal.getIndices();
+
+			var pre = "audioplayer-";
+			var id = indices.h + "." + indices.v;
+
+			if ( indices.f != undefined && indices.f >= 0 ) {
+					id = id + '.' + (indices.f+1);
+			}
+			else {
+				id  = id + '.0';
+			}
+
+			var audio = document.getElementById(pre + id);
+
+			var src = audio.firstChild.src;
+			
+			filename = id  + suffix;
+			var element = document.createElement('a');
+			element.setAttribute('href', src);
+			element.setAttribute('download', filename);
+
+			element.style.display = 'none';
+			document.body.appendChild(element);
+
+			element.click();
+
+			document.body.removeChild(element);
+		}
 	}
 
 })();

@@ -17,6 +17,7 @@ var RevealReader = window.RevealReader || (function(){
     var recordBtn;
     var pauseResBtn;
     var stopBtn;
+    var downloadBtn;
 
     var isPlay = true;
 
@@ -155,6 +156,14 @@ var RevealReader = window.RevealReader || (function(){
         stopBtn.setAttribute("value", "Stop");
         stopBtn.addEventListener('click', onStopBtnClicked);
         stopBtn.disabled = true;
+
+        downloadBtn = document.createElement("input");
+        downloadBtn.id = "downloadButton";
+        downloadBtn.setAttribute("type","button");
+        downloadBtn.setAttribute("value", "Download");
+        downloadBtn.addEventListener('click', onDownloadBtnClicked);
+        downloadBtn.disabled = true;
+       
 
         divElement.appendChild(playBtn);
         divElement.appendChild(recordBtn);
@@ -306,6 +315,14 @@ var RevealReader = window.RevealReader || (function(){
         pauseResBtn.disabled = true;
         stopBtn.disabled = true;
 
+        if (!isPlay) {
+            downloadBtn.disabled = false;
+        }
+
+    }
+
+    function onDownloadBtnClicked() {
+        Recorder.downloadZip();
     }
 
 	function record() {
