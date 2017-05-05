@@ -1,56 +1,318 @@
 var RevealReader = window.RevealReader || (function(){
 	
-	
-	var rate = 1,
-	pitch = 1,
-	volume = 1,
-	voice = 'UK English Female';
-	
+	var rate = 1;
+	var pitch = 1;
+	var volume = 1;
+	var voice = 'UK English Female';
+	var playerOpacity = 0.05;
+    var defaultDuration = 5;
+    var autoplay = false;
+    var continousRecord = true;
 
-	loadResource("../reveal.js/plugin/audio-slideshow-new/js/responsiveVoice.min.js", 'script', function(){
-		// console.log("responsiveVoice loaded");
-		// loadResource("../reveal.js/plugin/audio-slideshow-new/js/reader.js", 'script', function() {
-		// 	console.log("reader.js loaded");
-		setupLayout();
-	});
+    var silence;
+    var currentAudio = null;
+    var previousAudio = null;
 
-	Reveal.addEventListener( 'ready', function( event ) {
-		//setup();
-		// loadResource("../reveal.js/plugin/audio-slideshow-new/js/jquery-2.1.4.min.js", 'script', function(){
-		// loadResource("../reveal.js/plugin/audio-slideshow-new/js/responsiveVoice.min.js", 'script', function(){
-		// // console.log("responsiveVoice loaded");
-		// // loadResource("../reveal.js/plugin/audio-slideshow-new/js/reader.js", 'script', function() {
-		// // 	console.log("reader.js loaded");
-		// });
-		// });
-		// });
-		console.debug("ready");
+    var playBtn;
+    var recordBtn;
+    var pauseResBtn;
+    var stopBtn;
 
-	} );
+    var isPlay = true;
+
+    Reveal.addEventListener( 'fragmentshown', function( event ) {
+        selectReader();
+    } );
+
+    Reveal.addEventListener( 'fragmenthidden', function( event ) {
+        selectReader();
+    } );
+
+    Reveal.addEventListener( 'ready', function( event ) {
+        //setup();
+//console.debug( "ready ");
+        loadResource("../reveal.js/plugin/audio-slideshow-new/js/responsiveVoice.min.js", 'script', function(){
+            setup();
+            selectReader();
+
+        });
+
+                
+    } );
+
+    Reveal.addEventListener( 'slidechanged', function( event ) {
+        //console.debug( "slidechanged ");
+        var indices = Reveal.getIndices();
+                
+        selectReader();
+    } );
+
+    Reveal.addEventListener( 'paused', function( event ) {
+        console.debug("paused");
+        currentAudio.pause();
+
+    } );
+
+    Reveal.addEventListener( 'resumed', function( event ) {
+        console.debug("resumed");
+    } );
+
+    Reveal.addEventListener( 'overviewshown', function( event ) {
+        currentAudio.pause();
+        document.querySelector(".audio-controls").style.visibility = "hidden";
+    } );
+
+    Reveal.addEventListener( 'overviewhidden', function( event ) {
+        
+        document.querySelector(".audio-controls").style.visibility = "visible";
+    } );
+
+
+
+    function selectReader( previousAudio ) {
+        if ( currentAudio ) {
+            currentAudio.pause();
+            currentAudio.style.display = "none";
+        }
+        var indices = Reveal.getIndices();
+        var id = "audioplayer-" + indices.h + '.' + indices.v;
+        if ( indices.f != undefined && indices.f >= 0 ) {
+            id = id + '.' + (indices.f+1);
+        }
+        else {
+            id  = id + '.0';
+        } 
+        currentAudio = document.getElementById( id );
+        if ( currentAudio ) {
+            currentAudio.style.display = "block";
+            if ( previousAudio ) {
+                if ( currentAudio.id != previousAudio.id ) {
+                    currentAudio.volume = previousAudio.volume;
+                    currentAudio.muted = previousAudio.muted;
+//console.debug( "Play " + currentAudio.id);
+                    currentAudio.play();
+                }
+            }
+            else if ( autoplay ) {
+                currentAudio.play();
+            }
+        }
+    }
 
 	function setup() {
 		var config = Reveal.getConfig().reader;
+        if ( config ) {
+            if ( config.voice ) voice = config.voice;
+            if ( config.rate ) rate = config.rate;
+            if (config.volume) volume = config.volume;
+            if (config.pitch) pitch = config.pitch;
 
-		//setupLayout();
+        }
 
-		var speakBtn = document.createElement("i");
-        speakBtn.className = "subtitles-mode-btn fa fa-file-audio-o";
-        speakBtn.setAttribute('style', "position: fixed; left:8%; bottom:124px; font-size:24px; z-index:33");
-        speakBtn.addEventListener('click', record);
-		document.querySelector( ".reveal" ).appendChild( speakBtn );
+        if ( 'ontouchstart' in window || navigator.msMaxTouchPoints ) {
+            opacity = 1;        
+        }
+        
+        // set style so that audio controls are shown on hover 
+        var css='.audio-controls>audio { opacity:' + playerOpacity + ';} .audio-controls:hover>audio { opacity:1;}';
+        style=document.createElement( 'style' );
+        if ( style.styleSheet ) {
+            style.styleSheet.cssText=css;
+        }
+        else { 
+            style.appendChild( document.createTextNode( css ) );
+        }       
+        document.getElementsByTagName( 'head' )[0].appendChild( style );
 
-		// var recordBtn = document.createElement("i");
-  //       recordBtn.className = "subtitles-mode-btn fa fa-bullhorn";
-  //       recordBtn.setAttribute('style', "position: fixed; left:8%; bottom:150px; font-size:24px; z-index:33");
-  //       recordBtn.addEventListener('click', read());
-		// document.querySelector( ".reveal" ).appendChild( speakBtn );
-	}
+        silence = new SilentAudio( defaultDuration ); //
+
+        var divElement =  document.createElement( 'div' );
+        divElement.className = "audio-controls";
+        divElement.setAttribute( 'style', "width: 50%; height:75px; position: fixed; left: 25%; bottom: 104px;z-index: 33;" );
+
+        playBtn = document.createElement("input");
+        playBtn.id = "playButton";
+        playBtn.setAttribute("type","button");
+        playBtn.setAttribute("value", "Play TTS");
+        playBtn.addEventListener('click', onPlayBtnClicked);
+
+        recordBtn = document.createElement("input");
+        recordBtn.id = "recordButton";
+        recordBtn.setAttribute("type","button");
+        recordBtn.setAttribute("value", "Record TTS");
+        recordBtn.addEventListener('click', onRecordBtnClicked);
+
+        pauseResBtn = document.createElement("input");
+        pauseResBtn.id = "pauseResButton";
+        pauseResBtn.setAttribute("type","button");
+        pauseResBtn.setAttribute("value", "Pause");
+        pauseResBtn.addEventListener('click', onPauseResumeClicked);
+        pauseResBtn.disabled = true;
+
+        stopBtn = document.createElement("input");
+        stopBtn.id = "stopButton";
+        stopBtn.setAttribute("type","button");
+        stopBtn.setAttribute("value", "Stop");
+        stopBtn.addEventListener('click', onStopBtnClicked);
+        stopBtn.disabled = true;
+
+        divElement.appendChild(playBtn);
+        divElement.appendChild(recordBtn);
+        divElement.appendChild(pauseResBtn);
+        divElement.appendChild(stopBtn);
+
+        document.querySelector( ".reveal" ).appendChild( divElement );
+
+        var horizontalSlides = document.querySelectorAll( '.reveal .slides>section' );
+        for( var h = 0, len1 = horizontalSlides.length; h < len1; h++ ) {
+            var verticalSlides = horizontalSlides[ h ].querySelectorAll( 'section' );
+            if ( !verticalSlides.length ) {
+                setupAllReaderElements( divElement, h, 0, horizontalSlides[ h ] );
+            }
+            else {
+                for( var v = 0, len2 = verticalSlides.length; v < len2; v++ ) {
+                    setupAllReaderElements( divElement, h, v, verticalSlides[ v ] );
+                }
+            }
+        }
+
+    }
+	
+    function setupAllReaderElements( container, h, v, slide) {
+        setupReaderElement( container, h + '.' + v + '.0' );
+        var i = 0;
+        var  fragments;
+        while ( (fragments = slide.querySelectorAll( '.fragment[data-fragment-index="' + i +'"]' )).length > 0 ) {
+//console.log( h + '.' + v + '.' + i  + ": >" + text +"<")
+            i++;
+            setupReaderElement( container, h + '.' + v + '.' + i);
+        }
+    }
+
+    function setupReaderElement( container, indices ) {
+        var audioElement = document.createElement( 'audio' );
+        audioElement.setAttribute( 'style', "position: relative; top: 20px; left: 10%; width: 80%;" );
+        audioElement.id = "audioplayer-" + indices;
+        audioElement.style.display = "none";
+        audioElement.setAttribute( 'controls', '' );
+        audioElement.setAttribute( 'preload', 'none' );
+
+        audioElement.addEventListener( 'ended', function( event ) {
+            if ( typeof Recorder == 'undefined' || !Recorder.isRecording ) {
+                var previousAudio = currentAudio;
+                Reveal.next();
+                selectReader( previousAudio );
+            }
+        } );
+
+        audioElement.addEventListener( 'play', function( event ) {
+
+        } );
+
+        audioElement.addEventListener( 'pause', function( event ) {
+            
+        } );
+
+        audioElement.addEventListener( 'seeked', function( event ) {
+
+        } );        
+
+
+        var audioSource = document.createElement( 'source' );
+        audioSource.src = "";
+        audioElement.insertBefore(audioSource, audioElement.firstChild);
+
+        container.appendChild(audioElement);
+
+        
+    }
+
+    function setupFallbackAudio(audioElement) {
+               
+        if ( !audioElement.querySelector('source[data-audio-silent]') ) {
+            // create silenet source if not yet existent
+            var audioSource = document.createElement( 'source' );
+            audioSource.src = silence.dataURI; 
+            audioSource.setAttribute("data-audio-silent", defaultDuration);
+            audioElement.appendChild(audioSource, audioElement.firstChild);
+        }
+    }
+
+    function onPlayBtnClicked() {
+        // start play
+        isPlay = true;
+        play();
+
+        recordBtn.disabled = true;
+        pauseResBtn.disabled = false;
+        stopBtn.disabled = false;
+
+    }
+
+    function onRecordBtnClicked() {
+        isPlay = false;
+        record();
+
+        playBtn.disabled = true;
+        pauseResBtn.disabled = false;
+        stopBtn.disabled = false;
+
+    }
+
+    function onPauseResumeClicked() {
+        
+        if (responsiveVoice.isPlaying() && pauseResBtn.value === "Pause") {
+            responsiveVoice.pause();
+            if (!isPlay) { 
+                Recorder.pause();
+            }
+
+            pauseResBtn.value = "Resume";
+            stopBtn.disabled = true;
+        } else if (responsiveVoice.isPlaying() && pauseResBtn.value === "Resume") {
+            if (!isPlay) {
+                Recorder.resume();
+            }
+
+            responsiveVoice.resume();
+
+            pauseResBtn.value = "Pause";
+            stopBtn.disabled = false;
+        } else {
+            console.debug("playing error");
+            // TODO reset
+        }
+
+        if (isPlay) {
+            playBtn.disabled = true;
+        } else {
+            recordBtn.disabled = true;
+        }
+        pauseResBtn.disabled = false;
+        
+    }
+
+    function onStopBtnClicked() {
+        
+        if (responsiveVoice.isPlaying()) {
+            responsiveVoice.cancel();
+            if (!isPlay) {
+                Recorder.stop();
+            }
+        }
+
+        playBtn.disabled = false;
+        recordBtn.disabled = false;
+        pauseResBtn.disabled = true;
+        stopBtn.disabled = true;
+
+    }
 
 	function record() {
 
 		var audiotext = RevealSubtitles.getEditAudioText();
 
-		Recorder.toggleRecording();
+		Recorder.start();
 
 		var parameters = {
             rate: rate,
@@ -70,14 +332,12 @@ var RevealReader = window.RevealReader || (function(){
         var parameters = {
             rate: rate,
             pitch: pitch,
-            volume: volume
+            volume: volume,
+            onstart: onPlayStart,
+            onend: onPlayEnd
         };
 
 		responsiveVoice.speak(audiotext, voice, parameters);
-	}
-
-	function stop() {
-		responsiveVoice.cancel();
 	}
 
 	function loadVoices(selectView) {
@@ -97,8 +357,23 @@ var RevealReader = window.RevealReader || (function(){
 
 	function onRecordEnd() {
 		console.debug("onRecordEnd");
-		Recorder.toggleRecording();
+
+        Recorder.stop();
+        
+        // Reveal.next();
+        // selectReader();
+
+        // record();
 	}
+
+    function onPlayStart() {
+
+    }
+
+    function onPlayEnd() {
+        Reveal.next();
+        play();
+    }
 
 	function setupLayout() {
         var voiceDiv = document.createElement("div");

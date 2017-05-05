@@ -39,7 +39,7 @@ var Recorder = {
 
     }, 
 
-    toggleRecording: function toggleRecording( override ) {
+    toggleRecording: function toggleRecording(override,pause) {
 	var wasRecording = this.isRecording;
 	if( typeof override === 'boolean' ) {
 		this.isRecording = override;
@@ -52,10 +52,21 @@ var Recorder = {
 	this.isRecording = ( this.isRecording && !Reveal.isOverview() && !Reveal.isPaused() );
 
 	if ( !wasRecording && this.isRecording ) {
-		this.start();
+		if(this.paused){
+			this.resume();
+		}
+		else{
+			this.start();
+		}
 	}
 	else if ( wasRecording && !this.isRecording) {
-		this.stop();
+		if(pause == true){
+			this.isPaused = true;
+			this.pause()
+		}
+		else{
+			this.stop();
+		}
 	}
     },
 
@@ -127,7 +138,7 @@ var Recorder = {
 
 		this.filename = this.indices.h + '.' + this.indices.v;
 		if ( ( typeof this.indices.f != 'undefined' && this.indices.f >= 0) ) this.filename = this.filename + '.' + this.indices.f;
-
+		this.isPaused = false
 		this.recordRTC.stopRecording( function( url ) {
 			// add audio URL to slide
 			Recorder.recordedAudio.src = url;
@@ -153,6 +164,32 @@ var Recorder = {
 	context.clearRect ( 0 , 0 , this.canvas.width , this.canvas.height );
 	// Let others know recording has stopped
 	document.dispatchEvent( new CustomEvent('stoprecording') );
+    },
+
+    pause: function pause(){
+    	this.recordRTC.pauseRecording();
+
+    	var context = this.canvas.getContext( '2d' );
+		context.beginPath();
+		context.arc( ( this.canvas.width / 2 ), ( this.canvas.height / 2 ), ( this.canvas.width / 2 ) - 3, 0, Math.PI * 2, false );
+		context.lineWidth = 3;
+		context.fillStyle = '#ff0';
+		context.fill();
+		context.strokeStyle = '#ff0';
+		context.stroke();
+    },
+
+    resume: function resume(){
+    	this.recordRTC.resumeRecording();
+
+    	var context = this.canvas.getContext( '2d' );
+		context.beginPath();
+		context.arc( ( this.canvas.width / 2 ), ( this.canvas.height / 2 ), ( this.canvas.width / 2 ) - 3, 0, Math.PI * 2, false );
+		context.lineWidth = 3;
+		context.fillStyle = '#f00';
+		context.fill();
+		context.strokeStyle = '#f00';
+		context.stroke();
     },
 
     next : function next() {
@@ -362,7 +399,14 @@ var Recorder = {
 			
 	function recordedAudioExists( indices ) {
 		var id = "audioplayer-" + indices.h + "." + indices.v;
-		if ( indices.f != undefined && indices.f >= 0 ) id = id + "." + indices.f;
+		//if ( indices.f != undefined && indices.f >= 0 ) id = id + "." + indices.f;
+
+		if ( this.indices.f != undefined && this.indices.f >= 0 ) {
+				id = id + '.' + (this.indices.f+1);
+		}
+		else {
+			id  = id + '.0';
+		}
 		return ( document.getElementById( id ).src.substring(0,4) == "blob"); 
 	}
 

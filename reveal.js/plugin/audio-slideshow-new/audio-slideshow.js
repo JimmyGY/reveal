@@ -35,6 +35,10 @@ var RevealAudioSlideshow = window.RevealAudioSlideshow || (function(){
 	var previousAudio = null;
 	var timer = null;
 
+	var recordBtn;
+	var pauseResBtn;
+	var stopBtn;
+
 	// var script = document.createElement("script");
  //    script.src = 'https://code.responsivevoice.org/responsivevoice.js';
  //    document.body.appendChild(script);
@@ -184,6 +188,31 @@ var RevealAudioSlideshow = window.RevealAudioSlideshow || (function(){
 		var divElement =  document.createElement( 'div' );
 		divElement.className = "audio-controls";
 		divElement.setAttribute( 'style', "width: 50%; height:75px; position: fixed; left: 25%; bottom: 104px;z-index: 33;" );
+		
+		recordBtn = document.createElement("input");
+        recordBtn.id = "recordButton";
+        recordBtn.setAttribute("type","button");
+        recordBtn.setAttribute("value", "Record");
+        recordBtn.addEventListener('click', onRecordBtnClicked);
+
+        pauseResBtn = document.createElement("input");
+        pauseResBtn.id = "pauseResButton";
+        pauseResBtn.setAttribute("type","button");
+        pauseResBtn.setAttribute("value", "Pause");
+        pauseResBtn.addEventListener('click', onPauseResumeClicked);
+        pauseResBtn.disabled = true;
+
+        stopBtn = document.createElement("input");
+        stopBtn.id = "stopButton";
+        stopBtn.setAttribute("type","button");
+        stopBtn.setAttribute("value", "Stop");
+        stopBtn.addEventListener('click', onStopBtnClicked);
+        stopBtn.disabled = true;
+
+        divElement.appendChild(recordBtn);
+        divElement.appendChild(pauseResBtn);
+        divElement.appendChild(stopBtn);
+
 		document.querySelector( ".reveal" ).appendChild( divElement );
 
 		// create audio players for all slides
@@ -441,11 +470,46 @@ var RevealAudioSlideshow = window.RevealAudioSlideshow || (function(){
 				audioElement.insertBefore(audioSource, audioElement.firstChild);
 				setupFallbackAudio( audioElement, text, videoElement );
 			}
-		}	
+		}
+
 		container.appendChild( audioElement );
 	}
 
+	function onRecordBtnClicked() {
+		// start Record
+		Recorder.start()
 
+		recordBtn.disabled = true;
+		pauseResBtn.disabled = false;
+		stopBtn.disabled = false;
+
+	}
+
+	function onStopBtnClicked() {
+		// stop record
+		Recorder.stop()
+
+		recordBtn.disabled = false;
+		pauseResBtn.disabled = true;
+		stopBtn.disabled = true;
+
+	}
+
+	function onPauseResumeClicked() {
+		if(pauseResBtn.value === "Pause"){
+			console.log("pause");
+			pauseResBtn.value = "Resume";
+			Recorder.pause()
+			stopBtn.disabled = true;
+		}else{
+			console.log("resume");
+			pauseResBtn.value = "Pause";
+			Recorder.resume()
+			stopBtn.disabled = false;
+		}
+		recordBtn.disabled = true;
+		pauseResBtn.disabled = false;
+	}
 
 })();
 

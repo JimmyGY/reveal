@@ -144,7 +144,7 @@
       // Full list of configuration options available here:
       // https://github.com/hakimel/reveal.js#configuration
     Reveal.initialize({
-      subTitleTrigger: true,
+      //subTitleTrigger: true,
       width: 960,
       height: 540,
       // Factor of the display size that should remain empty around the content
@@ -156,7 +156,9 @@
       progress: true,
       history: true,
       center: true,
-      slideNumber: 'c/t',      
+      slideNumber: 'c/t',
+
+      tts: true,
       audio: {
         prefix: 'audio/',
         suffix: '.m4a',
@@ -236,24 +238,6 @@
         // will be disabled while the menu is open.
         keyboard: true
       },
-
-      aceEditMode: false,
-      ace: {
-
-        // Event is triggered when a new editor is created.
-        oninit: function(editor) {
-      
-        },
-        // Event is triggered when the text of an editor has changed
-        onchange: function(event, editor) {
-            Reveal.audioTextChanged(editor.getValue());
-        },
-        // Automatically focus an editor when it is displayed
-        autoFocus: false,
-
-        // defines a css class name for the ace editors
-        className: "ace"
-      },
       // Parallax scrolling
       // parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
       // parallaxBackgroundSize: '2100px 900px',
@@ -267,14 +251,14 @@
       { src: '../reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
       { src: '../reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
       { src: '../reveal.js/plugin/audio-slideshow-new/slideshow-recorder.js', condition: function( ) { return !!document.body.classList; } },				
-      { src: '../reveal.js/plugin/audio-slideshow-new/audio-slideshow.js', condition: function( ) { return !!document.body.classList; } },
+      { src: '../reveal.js/plugin/audio-slideshow-new/audio-slideshow.js', condition: function( ) { return !!document.body.classList && !Reveal.getConfig().tts; } },
+      { src: '../reveal.js/plugin/audio-slideshow-new/slideshow-reader.js', condition: function( ) { return !!document.body.classList && Reveal.getConfig().tts; } },
       { src: '../reveal.js/plugin/subtitles/subtitles.js', condition: function( ) { return !!document.body.classList; } },
-      { src: '../reveal.js/plugin/audio-slideshow-new/slideshow-reader.js', condition: function( ) { return !!document.body.classList; } },
       { src: '../reveal.js/plugin/timer/timer.js', condition:function() {return !!document.body.classList; } },
       { src: '../reveal.js/plugin/record-screen/record_screen.js', condition:function() {return !!document.body.classList; } },
       { src: '../reveal.js/plugin/math/math.js', async: true },
       { src: '../reveal.js/plugin/menu/menu.js' },
-      { src: '../reveal.js/plugin/reveal.js-ace/ace.js', async: true, condition:function() {return !!document.body.classList } },
+      // { src: '../reveal.js/plugin/reveal.js-ace/ace.js', async: true, condition:function() {return !!document.body.classList } },
       
       //{ src: '../reveal.js/plugin/title-footer/title-footer.js', async: true, callback: function() { title_footer.initialize("DIMACS Workshop on Network Coding: the Next 15 Years"); } }
       {
@@ -290,13 +274,13 @@
           //selector: "title",
       }
       ],
+
       keyboard: { 
         82: function() { Recorder.toggleRecording(); },	// press 'r' to start/stop recording
         90: function() { Recorder.downloadZip(); } 	// press 'z' to download zip containing audio files
         }
       });
     
-
     Reveal.configure({ 
       pdfMaxPagesPerSlide: 1 
     });
