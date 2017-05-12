@@ -814,12 +814,61 @@ var RevealMenu = window.RevealMenu || (function(){
 					closeMenu();
 				});
 				
-				//$('.tools-record-right')[0].addEventListener('click', function(event) {
-				//	Reveal.recordSwitchMode(false);
-				//	$('.tools-record-right')[0].style.display = "none";
-				//	$('.tools-record-left')[0].style.display = "inline";	
-				//	closeMenu();
-				//});
+				// Voice
+				$('<li class="slide-menu-item" data-item="' + (5) + '">'+'Voice'+
+					'<select id="voiceselection" style="display:inline; margin-left:10px;"></select>'+
+					//'<i class="tools-record-right fa fa-toggle-on" style="display:none; margin-left:10px;"></i>'+
+					'</li>').appendTo(menu);
+					
+				Reveal.loadVoice($('#voiceselection')[0]);
+
+				$('#voiceselection')[0].addEventListener('change', function(event) {
+					var selectVoice = $('#voiceselection')[0];
+					voice = selectVoice.value;
+
+					Reveal.changeReaderVoice(voice);
+					closeMenu();
+				});
+
+				// Rate
+				$('<li class="slide-menu-item" data-item="' + (6) + '">'+'Rate'+
+					'<input id="rate_slider" type="range" min="0.1" max="2" value="1" step="0.1"; margin-left:10px;"></input>'+
+					//'<i class="tools-record-right fa fa-toggle-on" style="display:none; margin-left:10px;"></i>'+
+					'</li>').appendTo(menu);
+
+				
+				$('#rate_slider')[0].addEventListener('change', function(event) {
+					var rate = $('#rate_slider')[0].value;
+        			
+					Reveal.changeReaderRate(rate);
+				});
+
+				// Pitch
+				$('<li class="slide-menu-item" data-item="' + (7) + '">'+'Pitch'+
+					'<input id="pitch_slider" type="range" min="0.1" max="2" value="1" step="0.1"; margin-left:10px;"></input>'+
+					//'<i class="tools-record-right fa fa-toggle-on" style="display:none; margin-left:10px;"></i>'+
+					'</li>').appendTo(menu);
+
+				
+				$('#pitch_slider')[0].addEventListener('change', function(event) {
+					var pitch = $('#pitch_slider')[0].value;
+        			
+					Reveal.changeReaderPitch(pitch);
+				});
+
+				// Volume
+				$('<li class="slide-menu-item" data-item="' + (8) + '">'+'Volume'+
+					'<input id="volume_slider" type="range" min="0.1" max="2" value="1" step="0.1"; margin-left:10px;"></input>'+
+					//'<i class="tools-record-right fa fa-toggle-on" style="display:none; margin-left:10px;"></i>'+
+					'</li>').appendTo(menu);
+
+				
+				$('#volume_slider')[0].addEventListener('change', function(event) {
+					var volume = $('#volume_slider')[0].value;
+        			
+					Reveal.changeReaderVolume(volume);
+				});
+
 			}
 			//
 			// Open menu options

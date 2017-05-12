@@ -35,7 +35,6 @@ var RevealReader = window.RevealReader || (function(){
         loadResource("../reveal.js/plugin/audio-slideshow-new/js/responsiveVoice.min.js", 'script', function(){
             setup();
             selectReader();
-
         });
 
                 
@@ -67,6 +66,27 @@ var RevealReader = window.RevealReader || (function(){
         
         document.querySelector(".audio-controls").style.visibility = "visible";
     } );
+
+    Reveal.addEventListener( 'changeReaderVoice', function( event ) {
+        voice = event.voice;
+    } );
+
+    Reveal.addEventListener( 'changeReaderRate', function( event ) {
+        rate = event.rate;
+    } );
+
+    Reveal.addEventListener( 'changeReaderPitch', function( event ) {
+        pitch = event.pitch;
+    } );
+
+    Reveal.addEventListener( 'changeReaderVolume', function( event ) {
+        volume = event.volume;
+    } );
+
+    Reveal.addEventListener('loadVoice', function(event) {
+        var selectView = event.selectview;
+        loadVoices(selectView);
+    });
 
 
 

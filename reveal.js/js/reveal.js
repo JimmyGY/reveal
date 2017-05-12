@@ -3799,6 +3799,36 @@
 		} );
 	}
 
+	function loadVoice(selectview) {
+		dispatchEvent('loadVoice', {
+			'selectview': selectview
+		});
+	}
+
+	function changeReaderVoice(voice) {
+		dispatchEvent( 'changeReaderVoice', {
+			'voice' : voice
+		});
+	}
+
+	function changeReaderRate(rate) {
+		dispatchEvent( 'changeReaderRate', {
+			'rate' : rate
+		});
+	}
+
+	function changeReaderPitch(pitch) {
+		dispatchEvent( 'changeReaderPitch', {
+			'pitch' : pitch
+		});
+	}
+
+	function changeReaderVolume(volume) {
+		dispatchEvent( 'changeReaderVolume', {
+			'volume' : volume
+		});
+	}
+
 	/**
 	 * Restores the presentation to the given state.
 	 *
@@ -5028,6 +5058,16 @@
 		timerSwitchMode : timerSwitchMode,
 		
 		recordSwitchMode : recordSwitchMode,
+
+		loadVoice : loadVoice,
+
+		changeReaderVoice : changeReaderVoice,
+
+		changeReaderRate : changeReaderRate,
+
+		changeReaderPitch : changeReaderPitch,
+
+		changeReaderVolume : changeReaderVolume,
 
 		displayPDFFragment : displayPDFFragment,
 		// Returns the previous slide element, may be null
