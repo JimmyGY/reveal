@@ -135,7 +135,9 @@ var RevealReader = window.RevealReader || (function(){
         }
         
         // set style so that audio controls are shown on hover 
-        var css='.audio-controls>audio { opacity:' + playerOpacity + ';} .audio-controls:hover>audio { opacity:1;}';
+        var css='.audio-controls { opacity:' + playerOpacity + ';} .audio-controls:hover { opacity:1;}';
+        //css += ' #playButton, #recordButton, #pauseResButton, #stopButton, #downloadButton {opacity:' + playerOpacity + ';}';
+        //css += ' #playButton:hover {opacity:1;}';
         style=document.createElement( 'style' );
         if ( style.styleSheet ) {
             style.styleSheet.cssText=css;
@@ -189,6 +191,7 @@ var RevealReader = window.RevealReader || (function(){
         divElement.appendChild(recordBtn);
         divElement.appendChild(pauseResBtn);
         divElement.appendChild(stopBtn);
+        divElement.appendChild(downloadBtn);
 
         document.querySelector( ".reveal" ).appendChild( divElement );
 

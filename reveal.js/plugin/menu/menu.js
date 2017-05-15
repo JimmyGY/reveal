@@ -753,14 +753,6 @@ var RevealMenu = window.RevealMenu || (function(){
 					Reveal.changeFontSize(1);
 				});
 				
-				// Download
-				$('<li class="slide-menu-item" data-item="' + (1) + '">'+'Download'+
-					'<i class="tools-download fa fa-download" style="display:inline; margin-left:10px;"></i>'+
-					'</li>').appendTo(menu);
-					
-				$('.tools-download')[0].addEventListener('click', function(event) {
-					Reveal.downloadAudio();
-				});
 				
 				// Print
 				$('<li class="slide-menu-item" data-item="' + (2) + '">'+'Print'+
@@ -768,6 +760,7 @@ var RevealMenu = window.RevealMenu || (function(){
 					'</li>').appendTo(menu);
 					
 				$('.tools-print')[0].addEventListener('click', function(event) {
+
 					var url = window.location.href;
 					var url_array = url.split("#");
 					var print_str = "?print-pdf";
@@ -777,6 +770,7 @@ var RevealMenu = window.RevealMenu || (function(){
 						new_url,
 						'_blank' // <- This is what makes it open in a new window.
 					);
+					Reveal.showSubtitle(true);
 				});
 				
 				// Timer

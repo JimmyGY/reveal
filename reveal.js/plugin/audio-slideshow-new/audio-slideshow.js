@@ -175,7 +175,9 @@ var RevealAudioSlideshow = window.RevealAudioSlideshow || (function(){
 		if ( Reveal.getConfig().audioStartAtFragment ) startAtFragment = Reveal.getConfig().audioStartAtFragment;
 
 		// set style so that audio controls are shown on hover 
-		var css='.audio-controls>audio { opacity:' + playerOpacity + ';} .audio-controls:hover>audio { opacity:1;}';
+		var css='.audio-controls { opacity:' + playerOpacity + ';} .audio-controls:hover { opacity:1;}';
+		//css += ' #recordBtn, #pauseResButton, #stopButton, #downloadButton {opacity:' + playerOpacity + ';}';
+		//css += ' #recordBtn, #pauseResButton, #stopButton, #downloadButton:hover {opacity:1;}';
 		style=document.createElement( 'style' );
 		if ( style.styleSheet ) {
 		    style.styleSheet.cssText=css;
