@@ -809,20 +809,20 @@ var RevealMenu = window.RevealMenu || (function(){
 				});
 				
 				// Voice
-				$('<li class="slide-menu-item" data-item="' + (5) + '">'+'Voice'+
-					'<select id="voiceselection" style="display:inline; margin-left:10px;"></select>'+
-					//'<i class="tools-record-right fa fa-toggle-on" style="display:none; margin-left:10px;"></i>'+
-					'</li>').appendTo(menu);
+				// $('<li class="slide-menu-item" data-item="' + (5) + '">'+'Voice'+
+				// 	'<select id="voiceselection" style="display:inline; margin-left:10px;"></select>'+
+				// 	//'<i class="tools-record-right fa fa-toggle-on" style="display:none; margin-left:10px;"></i>'+
+				// 	'</li>').appendTo(menu);
 					
-				Reveal.loadVoice($('#voiceselection')[0]);
+				// Reveal.loadVoice($('#voiceselection')[0]);
 
-				$('#voiceselection')[0].addEventListener('change', function(event) {
-					var selectVoice = $('#voiceselection')[0];
-					voice = selectVoice.value;
+				// $('#voiceselection')[0].addEventListener('change', function(event) {
+				// 	var selectVoice = $('#voiceselection')[0];
+				// 	voice = selectVoice.value;
 
-					Reveal.changeReaderVoice(voice);
-					closeMenu();
-				});
+				// 	Reveal.changeReaderVoice(voice);
+				// 	closeMenu();
+				// });
 
 				// Rate
 				$('<li class="slide-menu-item" data-item="' + (6) + '">'+'Rate'+
