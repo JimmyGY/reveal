@@ -92,7 +92,7 @@ User can go to any position of the slides by clickng the corresponding subtitle,
 
 Furthermore, you can use some optional tools in the ```Tools``` option in the menu, as below:
 
-![](figure/tool.jpg)
+![](figure/tool.PNG)
 
 ```subtitle``` button is used for enabling/disabling subtitle.
 
