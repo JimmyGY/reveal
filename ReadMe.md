@@ -135,9 +135,11 @@ After that, user can generate the audio one more time as mentioned above.
 
 ## Compatibility
 Our project supports the following broswer:
+
 ![](figure/browser.PNG) 
 
 Our project supports the following portable device:
+
 ![](figure/device.PNG) 
 
 ## License
