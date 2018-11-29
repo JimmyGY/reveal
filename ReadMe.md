@@ -1,5 +1,7 @@
 # Reveal.js -- extended version 
 
+IE fyp
+
 An extended version of [Reveal.js](https://github.com/hakimel/reveal.js). Based on reveal.js and its plugins, we fixed the existing bugs and add multiple features to enrich the user experience of reveal.js which includes subtitle for each slide, direct modification of subtitle in the web page, locally text-to-speech conversion in audio-slide-show, recorder to record and output corresponding audio for each slide, a much powerful menu with a few useful options.
 [Check out the live demo](https://jimmygy.github.io/reveal/7.1)
 
